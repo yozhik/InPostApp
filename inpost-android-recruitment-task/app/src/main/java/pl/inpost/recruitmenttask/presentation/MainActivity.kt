@@ -4,25 +4,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentItem
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListScreen
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListViewModel
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUIModel
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUiState
 import pl.inpost.recruitmenttask.presentation.ui.theme.InpostAppTheme
-import pl.inpost.recruitmenttask.presentation.ui.theme.LoadingIndicator
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,34 +32,27 @@ class MainActivity : ComponentActivity() {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
             InpostAppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Box {
-                        ShipmentContent(uiState)
-
-                        if (uiState.isLoading) {
-                            LoadingIndicator(
-                                modifier = Modifier
-                                    .size(64.dp)
-                                    .align(Alignment.Center),
-                                indicatorColor = Color.Yellow,
-                                strokeWidth = 4.dp
-                            )
-                        }
-                    }
-
-                }
+                ShipmentListScreen(
+                    uiState = uiState,
+                    onSortByStatus = viewModel::onSortByStatus,
+                    onSortByNumber = viewModel::onSortByNumber,
+                    onSortByPickupDate = viewModel::onSortByPickupDate,
+                    onSortByExpireDate = viewModel::onSortByExpireDate,
+                    onSortByStoredDate = viewModel::onSortByStoredDate,
+                    onArchiveItem = viewModel::onArchiveItem,
+                    modifier = Modifier
+                )
             }
         }
     }
+
 }
 
 @Composable
 fun ShipmentContent(
     uiState: ShipmentUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onArchiveItem: (String) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -68,15 +60,19 @@ fun ShipmentContent(
             .background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        itemsIndexed(uiState.shipmentList) { index, listItem ->
-            ShipmentItem(listItem)
+        itemsIndexed(uiState.shipmentList) { _, shipmentUIModel ->
+            ShipmentItem(
+                shipmentUIModel = shipmentUIModel,
+                onArchiveItem = onArchiveItem,
+                modifier = modifier
+            )
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun ShipmentContentPreview() {
     InpostAppTheme {
         ShipmentContent(
             ShipmentUiState(

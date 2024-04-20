@@ -1,5 +1,6 @@
-package pl.inpost.recruitmenttask.presentation
+package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,36 @@ class ShipmentListViewModel @Inject constructor(
 
     init {
         refreshData()
+    }
+
+    fun onSortByStatus() {
+        //TODO: implement
+        Log.d("RSD", "ShipmentListViewModel.onSortByStatus")
+    }
+
+    fun onSortByNumber() {
+        //TODO: implement
+        Log.d("RSD", "ShipmentListViewModel.onSortByNumber")
+    }
+
+    fun onSortByPickupDate() {
+        //TODO: implement
+        Log.d("RSD", "ShipmentListViewModel.onSortByPickupDate")
+    }
+
+    fun onSortByExpireDate() {
+        //TODO: implement
+        Log.d("RSD", "ShipmentListViewModel.onSortByExpireDate")
+    }
+
+    fun onSortByStoredDate() {
+        //TODO: implement
+        Log.d("RSD", "ShipmentListViewModel.onSortByStoredDate")
+    }
+
+    fun onArchiveItem(id: String) {
+        //TODO: implement
+        Log.d("RSD", "ShipmentListViewModel.onArchiveItem: $id")
     }
 
     private fun refreshData() {
@@ -60,6 +91,7 @@ class ShipmentListViewModel @Inject constructor(
             it.copy(isLoading = true)
         }
     }
+
     private fun hideLoading() {
         _uiState.update {
             it.copy(isLoading = false)

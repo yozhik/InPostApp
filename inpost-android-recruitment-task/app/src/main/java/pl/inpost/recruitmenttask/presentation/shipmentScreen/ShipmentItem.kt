@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.presentation
+package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +28,8 @@ import pl.inpost.recruitmenttask.R
 @Composable
 fun ShipmentItem(
     shipmentUIModel: ShipmentUIModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onArchiveItem: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -37,7 +41,7 @@ fun ShipmentItem(
                 .background(color = Color.White)
                 .padding(20.dp)
         ) {
-            ParcelNumberSection(shipmentUIModel)
+            ParcelNumberSection(shipmentUIModel, onArchiveItem)
             StatusSection(
                 shipmentUIModel,
                 modifier = modifier.padding(top = 20.dp)
@@ -53,6 +57,7 @@ fun ShipmentItem(
 @Composable
 fun ParcelNumberSection(
     shipmentUIModel: ShipmentUIModel,
+    onArchiveItem: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -75,14 +80,27 @@ fun ParcelNumberSection(
                 fontSize = 15.sp
             )
         }
-        Icon(
-            painter = painterResource(id = R.drawable.ic_kurier_car),
-            contentDescription = "Shipment Type",
-            tint = Color.Unspecified,
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(start = 10.dp),
-        )
+        Row {
+            IconButton(
+                onClick = { onArchiveItem(shipmentUIModel.shipmentNumber) },
+                modifier = Modifier
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = stringResource(id = R.string.action_archive),
+                    tint = colorResource(id = R.color.OrangeColor)
+                )
+            }
+            Icon(
+                painter = painterResource(id = R.drawable.ic_kurier_car),
+                contentDescription = "Shipment Type",
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 1.dp),
+            )
+        }
+
     }
 }
 

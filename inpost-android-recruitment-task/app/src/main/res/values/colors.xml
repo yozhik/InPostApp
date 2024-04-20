@@ -13,5 +13,6 @@
     <color name="DelimeterTextColor">#FFBBBDBF</color>
 
     <color name="ListBgColor">#FFF2F2F2</color>
+    <color name="OrangeColor">#FFFFCD00</color>
 
 </resources>

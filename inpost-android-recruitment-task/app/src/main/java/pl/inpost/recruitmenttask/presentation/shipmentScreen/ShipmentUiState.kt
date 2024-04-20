@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.presentation
+package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
 data class ShipmentUiState(
     val shipmentList: List<ShipmentUIModel> = emptyList(),
