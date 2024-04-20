@@ -1,14 +1,17 @@
-package pl.inpost.recruitmenttask.presentation.shipmentList
+package pl.inpost.recruitmenttask.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import pl.inpost.recruitmenttask.network.api.ShipmentApi
 import pl.inpost.recruitmenttask.network.model.ShipmentNetwork
 import pl.inpost.recruitmenttask.util.setState
@@ -22,6 +25,9 @@ class ShipmentListViewModel @Inject constructor(
     private val mutableViewState = MutableLiveData<List<ShipmentNetwork>>(emptyList())
     val viewState: LiveData<List<ShipmentNetwork>> = mutableViewState
 
+    private val _uiState = MutableStateFlow(ShipmentUiState())
+    val uiState: StateFlow<ShipmentUiState> = _uiState.asStateFlow()
+
     init {
         refreshData()
     }
@@ -30,6 +36,24 @@ class ShipmentListViewModel @Inject constructor(
         GlobalScope.launch(Dispatchers.Main) {
             val shipments = shipmentApi.getShipments()
             mutableViewState.setState { shipments }
+
+            val shipmentList = mutableListOf<ShipmentUIModel>()
+            shipments.forEach { shipment ->
+                shipmentList.add(
+                    ShipmentUIModel(
+                        number = shipment.number,
+                        status = shipment.status,
+                    )
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                _uiState.update {
+                    it.copy(
+                        shipmentList = shipmentList
+                    )
+                }
+            }
         }
     }
 }
