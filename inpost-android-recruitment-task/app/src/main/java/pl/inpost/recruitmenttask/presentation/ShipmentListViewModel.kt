@@ -41,8 +41,10 @@ class ShipmentListViewModel @Inject constructor(
             shipments.forEach { shipment ->
                 shipmentList.add(
                     ShipmentUIModel(
-                        number = shipment.number,
+                        shipmentNumber = shipment.number,
                         status = shipment.status,
+                        sender = shipment.sender?.name ?: shipment.sender?.email ?: "",
+                        date = shipment.expiryDate?.toString() ?: "",
                     )
                 )
             }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">InPost Recruitment Task</string>
 
-    <string name="status_adopted_at_sorting_center">Adopted in sorting center</string>
+    <string name="status_adopted_at_sorting_center">Adopted at sorting center</string>
     <string name="status_sent_from_sorting_center">Sent from sorting center</string>
     <string name="status_adopted_at_source_branch">Adopted at source branch</string>
     <string name="status_sent_from_source_branch">Sent from source branch</string>
@@ -14,4 +14,12 @@
     <string name="status_pickup_time_expired">Pickup time expired</string>
     <string name="status_ready_to_pickup">Ready to pickup</string>
     <string name="status_returned_to_sender">Returned to sender</string>
+
+
+    <string name="card_number_of_parcel_capital">NUMBER OF PARCEL</string>
+    <string name="card_status_capital">STATUS</string>
+    <string name="card_sender_capital">SENDER</string>
+
+    <string name="more">more</string>
+
 </resources>

@@ -1,6 +1,8 @@
 package pl.inpost.recruitmenttask.presentation
 
 data class ShipmentUIModel(
-    val number: String = "",
+    val shipmentNumber: String = "",
     val status: String = "",
+    val sender: String = "",
+    val date: String = "",
 )
