@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
@@ -15,10 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import pl.inpost.recruitmenttask.presentation.ui.theme.InpostAppTheme
+import pl.inpost.recruitmenttask.presentation.ui.theme.LoadingIndicator
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,7 +37,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ShipmentContent(uiState)
+                    Box {
+                        ShipmentContent(uiState)
+
+                        if (uiState.isLoading) {
+                            LoadingIndicator(
+                                modifier = Modifier
+                                    .size(64.dp)
+                                    .align(Alignment.Center),
+                                indicatorColor = Color.Yellow,
+                                strokeWidth = 4.dp
+                            )
+                        }
+                    }
+
                 }
             }
         }
@@ -61,7 +78,8 @@ fun ShipmentContent(
 @Composable
 fun GreetingPreview() {
     InpostAppTheme {
-        ShipmentContent(ShipmentUiState(
+        ShipmentContent(
+            ShipmentUiState(
                 listOf(
                     ShipmentUIModel(
                         shipmentNumber = "235678654323567889762231",
