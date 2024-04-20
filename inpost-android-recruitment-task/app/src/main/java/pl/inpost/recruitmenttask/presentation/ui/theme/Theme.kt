@@ -13,7 +13,14 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.core.view.WindowCompat
+import pl.inpost.recruitmenttask.R
+
+val MontserratFontFamily = FontFamily(
+    Font(R.font.montserrat_semibold),
+)
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,

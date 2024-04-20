@@ -1,6 +1,6 @@
 package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
 data class ShipmentUiState(
-    val shipmentList: List<ShipmentUIModel> = emptyList(),
+    val shipmentList: List<ShipmentUIType> = emptyList(),
     val isLoading: Boolean = false,
 )

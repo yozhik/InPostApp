@@ -16,10 +16,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.DividerItem
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentItem
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListScreen
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListViewModel
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUIModel
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUIType
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUiState
 import pl.inpost.recruitmenttask.presentation.ui.theme.InpostAppTheme
 
@@ -61,11 +62,17 @@ fun ShipmentContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         itemsIndexed(uiState.shipmentList) { _, shipmentUIModel ->
-            ShipmentItem(
-                shipmentUIModel = shipmentUIModel,
-                onArchiveItem = onArchiveItem,
-                modifier = modifier
-            )
+            when (shipmentUIModel) {
+                is ShipmentUIType.DividerModel -> DividerItem(title = shipmentUIModel.title)
+                is ShipmentUIType.ShipmentUIModel -> {
+                    ShipmentItem(
+                        shipmentUIModel = shipmentUIModel,
+                        onArchiveItem = onArchiveItem,
+                        modifier = modifier
+                    )
+                }
+            }
+
         }
     }
 }
@@ -77,13 +84,13 @@ fun ShipmentContentPreview() {
         ShipmentContent(
             ShipmentUiState(
                 listOf(
-                    ShipmentUIModel(
+                    ShipmentUIType.ShipmentUIModel(
                         shipmentNumber = "235678654323567889762231",
                         status = "Wydana do doręczenia",
                         sender = "Serhii Radkivskyi",
                         date = "pn. | 20.04.24 | 17:42"
                     ),
-                    ShipmentUIModel(
+                    ShipmentUIType.ShipmentUIModel(
                         shipmentNumber = "235678654323567889762231",
                         status = "Wydana do doręczenia",
                         sender = "Serhii Radkivskyi",

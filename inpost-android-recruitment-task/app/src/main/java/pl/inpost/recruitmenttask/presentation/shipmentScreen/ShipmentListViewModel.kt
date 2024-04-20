@@ -1,6 +1,8 @@
 package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,12 +13,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pl.inpost.recruitmenttask.network.ApiTypeAdapter
 import pl.inpost.recruitmenttask.network.api.ShipmentApi
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ShipmentListViewModel @Inject constructor(
-    private val shipmentApi: ShipmentApi
+    private val shipmentApi: ShipmentApi,
+    private val apiTypeAdapter: ApiTypeAdapter,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ShipmentUiState())
@@ -56,23 +64,28 @@ class ShipmentListViewModel @Inject constructor(
         Log.d("RSD", "ShipmentListViewModel.onArchiveItem: $id")
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun refreshData() {
         viewModelScope.launch(Dispatchers.Main) {
             showLoading()
             val shipments = shipmentApi.getShipments()
 
-            val shipmentList = mutableListOf<ShipmentUIModel>()
+            val shipmentList = mutableListOf<ShipmentUIType>()
             withContext(Dispatchers.Default) {
                 shipments.forEach { shipment ->
                     shipmentList.add(
-                        ShipmentUIModel(
+                        ShipmentUIType.ShipmentUIModel(
                             shipmentNumber = shipment.number,
                             status = shipment.status,
                             sender = shipment.sender?.name ?: shipment.sender?.email ?: "",
-                            date = shipment.expiryDate?.toString() ?: "",
+                            date = shipment.expiryDate?.formatCustomDateTime() ?: "",
                         )
                     )
                 }
+
+                //TODO: change with some constants and then fetch strings in View
+                shipmentList.add(0, ShipmentUIType.DividerModel("Ready for shipment"))
+                shipmentList.add(3, ShipmentUIType.DividerModel("Pozostale"))
             }
 
             withContext(Dispatchers.Main) {
@@ -96,5 +109,12 @@ class ShipmentListViewModel @Inject constructor(
         _uiState.update {
             it.copy(isLoading = false)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun ZonedDateTime.formatCustomDateTime(): String {
+        // Define the formatter with desired pattern
+        val formatter = DateTimeFormatter.ofPattern("EE. | dd.MM.yy | HH:mm", Locale.getDefault())
+        return this.format(formatter)
     }
 }
