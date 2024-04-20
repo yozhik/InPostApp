@@ -1,6 +1,7 @@
 package pl.inpost.recruitmenttask.network.api
 
 import android.content.Context
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -9,7 +10,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import pl.inpost.recruitmenttask.R
 import pl.inpost.recruitmenttask.network.ApiTypeAdapter
-import pl.inpost.recruitmenttask.network.model.*
+import pl.inpost.recruitmenttask.network.model.CustomerNetwork
+import pl.inpost.recruitmenttask.network.model.EventLogNetwork
+import pl.inpost.recruitmenttask.network.model.OperationsNetwork
+import pl.inpost.recruitmenttask.network.model.ShipmentNetwork
+import pl.inpost.recruitmenttask.network.model.ShipmentStatus
+import pl.inpost.recruitmenttask.network.model.ShipmentType
+import pl.inpost.recruitmenttask.network.model.ShipmentsResponse
 import java.time.ZonedDateTime
 import kotlin.random.Random
 
@@ -19,30 +26,29 @@ class MockShipmentApi(
 ) : ShipmentApi {
 
     private val response by lazy {
-        val json = context.resources.openRawResource(R.raw.mock_shipment_api_response)
-            .bufferedReader()
-            .use { it.readText() }
+        try {
+            val json = context.resources.openRawResource(R.raw.mock_shipment_api_response)
+                .bufferedReader()
+                .use { it.readText() }
 
-        val jsonAdapter = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .add(apiTypeAdapter)
-            .build()
-            .adapter(ShipmentsResponse::class.java)
+            val jsonAdapter = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .add(apiTypeAdapter)
+                .build()
+                .adapter(ShipmentsResponse::class.java)
 
-        jsonAdapter.fromJson(json) as ShipmentsResponse
+            jsonAdapter.fromJson(json) as ShipmentsResponse
+        } catch (e: Exception) {
+            Log.e("MockShipmentApi", "Failed to parse JSON", e)
+            null
+        }
     }
     private var firstUse = true
 
     override suspend fun getShipments(): List<ShipmentNetwork> {
         return withContext(Dispatchers.IO) {
             delay(1000)
-            response.shipments
-//        return if (firstUse) {
-//            firstUse = false
-//            emptyList()
-//        } else {
-//            response.shipments
-//        }
+            response?.shipments ?: emptyList()
         }
     }
 }
