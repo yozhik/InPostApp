@@ -4,7 +4,9 @@ import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import pl.inpost.recruitmenttask.R
 import pl.inpost.recruitmenttask.network.ApiTypeAdapter
 import pl.inpost.recruitmenttask.network.model.*
@@ -32,14 +34,16 @@ class MockShipmentApi(
     private var firstUse = true
 
     override suspend fun getShipments(): List<ShipmentNetwork> {
-        delay(1000)
-        return response.shipments
+        return withContext(Dispatchers.IO) {
+            delay(1000)
+            response.shipments
 //        return if (firstUse) {
 //            firstUse = false
 //            emptyList()
 //        } else {
 //            response.shipments
 //        }
+        }
     }
 }
 
