@@ -14,4 +14,15 @@
     <string name="status_pickup_time_expired">Upłynął termin odbioru</string>
     <string name="status_ready_to_pickup">Gotowa do odbioru</string>
     <string name="status_returned_to_sender">Zwrot do Nadawcy</string>
+
+    <string name="card_number_of_parcel_capital">NR PRZESYŁKI</string>
+    <string name="card_status_capital">STATUS</string>
+    <string name="card_sender_capital">NADAWCA</string>
+
+    <string name="action_sort_by_status">Sortuj według stanu</string>
+    <string name="action_sort_by_number">Sortuj według numeru</string>
+    <string name="action_sort_by_pickup_date">Sortuj według daty odbioru</string>
+    <string name="action_sort_by_expire_date">Sortuj według daty ważności</string>
+    <string name="action_sort_by_stored_date">Sortuj według zapisanej daty</string>
+    <string name="action_archive">Archiwizuj</string>
 </resources>

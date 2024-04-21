@@ -17,12 +17,8 @@ fun ShipmentNetwork.toEntity(): ShipmentEntity {
         expiryDateTimestamp = expiryDate?.zonedDateTimeToTimestampUTC(),
         storedDateTimestamp = storedDate?.zonedDateTimeToTimestampUTC(),
         pickUpDateTimestamp = storedDate?.zonedDateTimeToTimestampUTC(),
+        sender = sender,
+        receiver = receiver,
+        operations = operations
     )
 }
-
-//data class ShipmentNetwork(
-//    val eventLog: List<EventLogNetwork>,
-//    val receiver: CustomerNetwork?,
-//    val sender: CustomerNetwork?,
-//    val operations: OperationsNetwork
-//)

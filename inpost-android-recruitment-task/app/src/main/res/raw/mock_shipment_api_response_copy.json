@@ -3,7 +3,7 @@
     {
       "number": "16730345345597442248333",
       "expiryDate": "2017-11-29T04:56:07Z",
-      "storedDate": "2017-11-29T04:56:07Z",
+      "storedDate": "2017-12-29T04:56:07Z",
       "openCode": "987654",
       "shipmentType": "PARCEL_LOCKER",
       "status": "READY_TO_PICKUP",
@@ -22,12 +22,12 @@
         }
       ],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender1673@example.com",
         "phoneNumber": "500500500",
-        "name": "sender"
+        "name": "sender1673"
       },
       "receiver": {
-        "email": "receiver@example.com",
+        "email": "receiver1673@example.com",
         "phoneNumber": "500500500",
         "name": "IKEA"
       },
@@ -42,19 +42,19 @@
     },
     {
       "number": "26730345345597442248333",
-      "expiryDate": "2024-10-29T04:56:07Z",
-      "storedDate": "2024-10-29T04:56:07Z",
+      "expiryDate": "2024-03-12T04:56:07Z",
+      "storedDate": "2024-07-12T04:56:07Z",
       "openCode": "987654",
       "shipmentType": "PARCEL_LOCKER",
       "status": "CONFIRMED",
       "eventLog": [],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender2673@example.com",
         "phoneNumber": "500500500",
-        "name": "sender"
+        "name": "sender2673"
       },
       "receiver": {
-        "email": "receiver@example.com",
+        "email": "receiver2673@example.com",
         "phoneNumber": "500500500",
         "name": "x-kom.pl"
       },
@@ -76,12 +76,12 @@
       "status": "READY_TO_PICKUP",
       "eventLog": [],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender3673@example.com",
         "phoneNumber": "500500500",
-        "name": "sender"
+        "name": "sender3673"
       },
       "receiver": {
-        "email": "receiver@example.com",
+        "email": "receiver3673@example.com",
         "phoneNumber": "500500500",
         "name": "Offy"
       },
@@ -103,9 +103,9 @@
       "status": "OUT_FOR_DELIVERY",
       "eventLog": [],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender4673@example.com",
         "phoneNumber": "500500500",
-        "name": "Biker"
+        "name": "Biker4673"
       },
       "operations": {
         "delete": false,
@@ -125,9 +125,9 @@
       "status": "OUT_FOR_DELIVERY",
       "eventLog": [],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender5673@example.com",
         "phoneNumber": "500500500",
-        "name": "sender"
+        "name": "sender5673"
       },
       "operations": {
         "delete": false,
@@ -145,9 +145,9 @@
       "status": "NOT_READY",
       "eventLog": [],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender6673@example.com",
         "phoneNumber": "500500500",
-        "name": "sender"
+        "name": "sender6673"
       },
       "operations": {
         "delete": false,
@@ -167,9 +167,9 @@
       "status": "SENT_FROM_SOURCE_BRANCH",
       "eventLog": [],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender7673@example.com",
         "phoneNumber": "500500500",
-        "name": "sender"
+        "name": "sender7673"
       },
       "operations": {
         "delete": false,
@@ -183,15 +183,15 @@
     {
       "number": "86730345345597442248333",
       "expiryDate": "2023-10-05T04:56:07Z",
-      "storedDate": "2023-10-04T04:56:07Z",
+      "storedDate": "2023-09-04T04:56:07Z",
       "openCode": "987654",
       "shipmentType": "PARCEL_LOCKER",
       "status": "AVIZO",
       "eventLog": [],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender8673@example.com",
         "phoneNumber": "500500500",
-        "name": "sender"
+        "name": "sender8673"
       },
       "operations": {
         "delete": false,
@@ -211,9 +211,9 @@
       "status": "CONFIRMED",
       "eventLog": [],
       "sender": {
-        "email": "sender@example.com",
+        "email": "sender9673@example.com",
         "phoneNumber": "500500500",
-        "name": "sender"
+        "name": "sender9673"
       },
       "operations": {
         "delete": false,

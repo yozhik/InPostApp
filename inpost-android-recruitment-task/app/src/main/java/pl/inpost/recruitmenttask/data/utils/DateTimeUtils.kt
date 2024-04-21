@@ -22,7 +22,7 @@ fun Long?.timestampToUserDefaultZonedDateTime(): ZonedDateTime? {
 }
 
 fun ZonedDateTime.formatFullShipmentDateTime(): String {
-    val formatter = DateTimeFormatter.ofPattern("EE. | dd.MM.yy | HH:mm", Locale.getDefault())
+    val formatter = DateTimeFormatter.ofPattern("EE | dd.MM.yy | HH:mm", Locale.getDefault())
     return this.format(formatter)
 }
 

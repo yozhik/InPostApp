@@ -131,7 +131,7 @@ fun StatusSection(
             )
             if (!shipmentUIModel.date.isNullOrEmpty()) {
                 Text(
-                    text = stringResource(id = shipmentUIModel.status.nameRes),
+                    text = stringResource(id = shipmentUIModel.status.nameRes).uppercase(),
                     color = colorResource(id = R.color.ShipmentCardTitleColor),
                     fontSize = 11.sp,
                     textAlign = TextAlign.End,
