@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.network.api
+package pl.inpost.recruitmenttask.data.network.api
 
 import android.content.Context
 import android.util.Log
@@ -9,14 +9,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import pl.inpost.recruitmenttask.R
-import pl.inpost.recruitmenttask.network.ApiTypeAdapter
-import pl.inpost.recruitmenttask.network.model.CustomerNetwork
-import pl.inpost.recruitmenttask.network.model.EventLogNetwork
-import pl.inpost.recruitmenttask.network.model.OperationsNetwork
-import pl.inpost.recruitmenttask.network.model.ShipmentNetwork
-import pl.inpost.recruitmenttask.network.model.ShipmentStatus
-import pl.inpost.recruitmenttask.network.model.ShipmentType
-import pl.inpost.recruitmenttask.network.model.ShipmentsResponse
+import pl.inpost.recruitmenttask.data.network.ApiTypeAdapter
+import pl.inpost.recruitmenttask.data.network.model.CustomerNetwork
+import pl.inpost.recruitmenttask.data.network.model.EventLogNetwork
+import pl.inpost.recruitmenttask.data.network.model.OperationsNetwork
+import pl.inpost.recruitmenttask.data.network.model.ShipmentNetwork
+import pl.inpost.recruitmenttask.data.network.model.ShipmentStatus
+import pl.inpost.recruitmenttask.data.network.model.ShipmentType
+import pl.inpost.recruitmenttask.data.network.model.ShipmentsResponse
 import java.time.ZonedDateTime
 import kotlin.random.Random
 
