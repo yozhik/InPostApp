@@ -129,33 +129,35 @@ fun StatusSection(
                 fontFamily = MontserratFontFamily,
                 modifier = Modifier.weight(0.4f)
             )
-            Text(
-                text = stringResource(id = shipmentUIModel.status.nameRes),
-                color = colorResource(id = R.color.ShipmentCardTitleColor),
-                fontSize = 11.sp,
-                textAlign = TextAlign.End,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = MontserratFontFamily,
-                modifier = Modifier.weight(0.6f)
-            )
-        }
-
-        if (!shipmentUIModel.date.isNullOrEmpty()) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            if (!shipmentUIModel.date.isNullOrEmpty()) {
                 Text(
                     text = stringResource(id = shipmentUIModel.status.nameRes),
-                    color = colorResource(id = R.color.ShipmentCardValueBodyColor),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
-                    textAlign = TextAlign.Start,
+                    color = colorResource(id = R.color.ShipmentCardTitleColor),
+                    fontSize = 11.sp,
+                    textAlign = TextAlign.End,
+                    fontWeight = FontWeight.SemiBold,
                     fontFamily = MontserratFontFamily,
-                    modifier = Modifier
-                        .weight(0.4f)
-                        .wrapContentWidth(align = Alignment.Start)
+                    modifier = Modifier.weight(0.6f)
                 )
+            }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = shipmentUIModel.status.nameRes),
+                color = colorResource(id = R.color.ShipmentCardValueBodyColor),
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp,
+                textAlign = TextAlign.Start,
+                fontFamily = MontserratFontFamily,
+                modifier = Modifier
+                    .weight(0.4f)
+                    .wrapContentWidth(align = Alignment.Start)
+            )
+            if (!shipmentUIModel.date.isNullOrEmpty()) {
                 Text(
                     text = shipmentUIModel.date,
                     color = colorResource(id = R.color.ShipmentCardValueBodyColor),

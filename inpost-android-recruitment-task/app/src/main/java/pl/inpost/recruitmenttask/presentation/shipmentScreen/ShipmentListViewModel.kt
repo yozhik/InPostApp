@@ -129,7 +129,7 @@ class ShipmentListViewModel @Inject constructor(
 
                 //TODO: change with some constants and then fetch strings in View
                 shipmentList.add(0, ShipmentUIType.DividerModel("Ready for shipment"))
-                shipmentList.add(3, ShipmentUIType.DividerModel("Pozostale"))
+                shipmentList.add(shipmentList.size - 1, ShipmentUIType.DividerModel("Pozostale"))
 
                 withContext(Dispatchers.Main) {
                     _uiState.update {
