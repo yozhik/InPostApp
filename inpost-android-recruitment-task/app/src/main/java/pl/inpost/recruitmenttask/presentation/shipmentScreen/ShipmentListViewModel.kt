@@ -12,9 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.inpost.recruitmenttask.network.api.ShipmentApi
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import pl.inpost.recruitmenttask.util.formatFullShipmentDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,7 +70,7 @@ class ShipmentListViewModel @Inject constructor(
                             shipmentNumber = shipment.number,
                             status = shipment.status,
                             sender = shipment.sender?.name ?: shipment.sender?.email ?: "",
-                            date = shipment.expiryDate?.formatCustomDateTime() ?: "",
+                            date = shipment.expiryDate?.formatFullShipmentDateTime() ?: "",
                         )
                     )
                 }
@@ -103,11 +101,5 @@ class ShipmentListViewModel @Inject constructor(
         _uiState.update {
             it.copy(isLoading = false)
         }
-    }
-
-    private fun ZonedDateTime.formatCustomDateTime(): String {
-        // Define the formatter with desired pattern
-        val formatter = DateTimeFormatter.ofPattern("EE. | dd.MM.yy | HH:mm", Locale.getDefault())
-        return this.format(formatter)
     }
 }
