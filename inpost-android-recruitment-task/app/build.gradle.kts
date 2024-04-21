@@ -35,6 +35,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+
+        // Enable desugaring to support working with Java 8 APIs (dates) on API level less than 26
+        //https://developer.android.com/studio/write/java8-support
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -82,6 +86,9 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+
+    //Java date time support on API < 26
+    coreLibraryDesugaring(libs.desugar.jdk)
 
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)

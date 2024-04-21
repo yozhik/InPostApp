@@ -1,8 +1,6 @@
 package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,18 +11,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import pl.inpost.recruitmenttask.network.ApiTypeAdapter
 import pl.inpost.recruitmenttask.network.api.ShipmentApi
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ShipmentListViewModel @Inject constructor(
     private val shipmentApi: ShipmentApi,
-    private val apiTypeAdapter: ApiTypeAdapter,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ShipmentUiState())
@@ -64,7 +59,6 @@ class ShipmentListViewModel @Inject constructor(
         Log.d("RSD", "ShipmentListViewModel.onArchiveItem: $id")
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun refreshData() {
         viewModelScope.launch(Dispatchers.Main) {
             showLoading()
@@ -111,8 +105,7 @@ class ShipmentListViewModel @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun ZonedDateTime.formatCustomDateTime(): String {
+    private fun ZonedDateTime.formatCustomDateTime(): String {
         // Define the formatter with desired pattern
         val formatter = DateTimeFormatter.ofPattern("EE. | dd.MM.yy | HH:mm", Locale.getDefault())
         return this.format(formatter)
