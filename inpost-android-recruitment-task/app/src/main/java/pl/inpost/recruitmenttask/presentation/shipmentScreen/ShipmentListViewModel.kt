@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import pl.inpost.recruitmenttask.network.api.ShipmentApi
+import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import pl.inpost.recruitmenttask.util.formatFullShipmentDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class ShipmentListViewModel @Inject constructor(
-    private val shipmentApi: ShipmentApi,
+    private val shipmentRepository: ShipmentRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ShipmentUiState())
@@ -60,7 +60,7 @@ class ShipmentListViewModel @Inject constructor(
     private fun refreshData() {
         viewModelScope.launch(Dispatchers.Main) {
             showLoading()
-            val shipments = shipmentApi.getShipments()
+            val shipments = shipmentRepository.getShipments()
 
             val shipmentList = mutableListOf<ShipmentUIType>()
             withContext(Dispatchers.Default) {
