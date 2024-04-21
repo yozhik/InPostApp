@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import pl.inpost.recruitmenttask.domain.model.ShipmentStatus
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.DividerItem
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentItem
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListScreen
@@ -86,13 +87,13 @@ fun ShipmentContentPreview() {
                 listOf(
                     ShipmentUIType.ShipmentUIModel(
                         shipmentNumber = "235678654323567889762231",
-                        status = "Wydana do doręczenia",
+                        status = ShipmentStatus.ADOPTED_AT_SORTING_CENTER,
                         sender = "Serhii Radkivskyi",
                         date = "pn. | 20.04.24 | 17:42"
                     ),
                     ShipmentUIType.ShipmentUIModel(
                         shipmentNumber = "235678654323567889762231",
-                        status = "Wydana do doręczenia",
+                        status = ShipmentStatus.PICKUP_TIME_EXPIRED,
                         sender = "Serhii Radkivskyi",
                         date = "pn. | 20.04.24 | 17:42"
                     )

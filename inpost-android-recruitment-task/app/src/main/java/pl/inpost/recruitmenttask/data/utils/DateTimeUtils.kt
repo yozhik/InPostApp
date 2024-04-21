@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.util
+package pl.inpost.recruitmenttask.data.utils
 
 import java.time.Instant
 import java.time.ZoneId

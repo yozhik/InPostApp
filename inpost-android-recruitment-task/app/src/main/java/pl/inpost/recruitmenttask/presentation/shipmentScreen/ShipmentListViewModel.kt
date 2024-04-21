@@ -8,11 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
-import pl.inpost.recruitmenttask.util.formatFullShipmentDateTime
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.mapper.toUIModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,28 +29,88 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onSortByStatus() {
-        //TODO: implement
-        Log.d("RSD", "ShipmentListViewModel.onSortByStatus")
+        viewModelScope.launch {
+            showLoading()
+            val shipmentList = mutableListOf<ShipmentUIType>()
+            shipmentRepository.getSortedShipmentsByStatus().collectLatest { shipments ->
+                shipmentList.addAll(shipments.toUIModel())
+                shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Status"))
+                _uiState.update {
+                    it.copy(
+                        shipmentList = shipmentList
+                    )
+                }
+                hideLoading()
+            }
+        }
     }
 
     fun onSortByNumber() {
-        //TODO: implement
-        Log.d("RSD", "ShipmentListViewModel.onSortByNumber")
+        viewModelScope.launch {
+            showLoading()
+            val shipmentList = mutableListOf<ShipmentUIType>()
+            shipmentRepository.getSortedShipmentsByNumber().collectLatest { shipments ->
+                shipmentList.addAll(shipments.toUIModel())
+                shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Number"))
+                _uiState.update {
+                    it.copy(
+                        shipmentList = shipmentList
+                    )
+                }
+                hideLoading()
+            }
+        }
     }
 
     fun onSortByPickupDate() {
-        //TODO: implement
-        Log.d("RSD", "ShipmentListViewModel.onSortByPickupDate")
+        viewModelScope.launch {
+            showLoading()
+            val shipmentList = mutableListOf<ShipmentUIType>()
+            shipmentRepository.getSortedShipmentsByPickupDate().collectLatest { shipments ->
+                shipmentList.addAll(shipments.toUIModel())
+                shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Pickup Date"))
+                _uiState.update {
+                    it.copy(
+                        shipmentList = shipmentList
+                    )
+                }
+                hideLoading()
+            }
+        }
     }
 
     fun onSortByExpireDate() {
-        //TODO: implement
-        Log.d("RSD", "ShipmentListViewModel.onSortByExpireDate")
+        viewModelScope.launch {
+            showLoading()
+            val shipmentList = mutableListOf<ShipmentUIType>()
+            shipmentRepository.getSortedShipmentsByExpiredDate().collectLatest { shipments ->
+                shipmentList.addAll(shipments.toUIModel())
+                shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Expire Date"))
+                _uiState.update {
+                    it.copy(
+                        shipmentList = shipmentList
+                    )
+                }
+                hideLoading()
+            }
+        }
     }
 
     fun onSortByStoredDate() {
-        //TODO: implement
-        Log.d("RSD", "ShipmentListViewModel.onSortByStoredDate")
+        viewModelScope.launch {
+            showLoading()
+            val shipmentList = mutableListOf<ShipmentUIType>()
+            shipmentRepository.getSortedShipmentsByStoredDate().collectLatest { shipments ->
+                shipmentList.addAll(shipments.toUIModel())
+                shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Stored Date"))
+                _uiState.update {
+                    it.copy(
+                        shipmentList = shipmentList
+                    )
+                }
+                hideLoading()
+            }
+        }
     }
 
     fun onArchiveItem(id: String) {
@@ -60,33 +121,24 @@ class ShipmentListViewModel @Inject constructor(
     private fun refreshData() {
         viewModelScope.launch(Dispatchers.Main) {
             showLoading()
-            val shipments = shipmentRepository.getShipments()
 
             val shipmentList = mutableListOf<ShipmentUIType>()
-            withContext(Dispatchers.Default) {
-                shipments.forEach { shipment ->
-                    shipmentList.add(
-                        ShipmentUIType.ShipmentUIModel(
-                            shipmentNumber = shipment.number,
-                            status = shipment.status,
-                            sender = shipment.sender?.name ?: shipment.sender?.email ?: "",
-                            date = shipment.expiryDate?.formatFullShipmentDateTime() ?: "",
-                        )
-                    )
-                }
+            shipmentRepository.loadShipments()
+            shipmentRepository.shipments.collectLatest { shipments ->
+                shipmentList.addAll(shipments.toUIModel())
 
                 //TODO: change with some constants and then fetch strings in View
                 shipmentList.add(0, ShipmentUIType.DividerModel("Ready for shipment"))
                 shipmentList.add(3, ShipmentUIType.DividerModel("Pozostale"))
-            }
 
-            withContext(Dispatchers.Main) {
-                _uiState.update {
-                    it.copy(
-                        shipmentList = shipmentList
-                    )
+                withContext(Dispatchers.Main) {
+                    _uiState.update {
+                        it.copy(
+                            shipmentList = shipmentList
+                        )
+                    }
+                    hideLoading()
                 }
-                hideLoading()
             }
         }
     }

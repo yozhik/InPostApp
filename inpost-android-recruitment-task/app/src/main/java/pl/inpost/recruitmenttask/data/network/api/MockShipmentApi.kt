@@ -27,7 +27,7 @@ class MockShipmentApi(
 
     private val response by lazy {
         try {
-            val json = context.resources.openRawResource(R.raw.mock_shipment_api_response)
+            val json = context.resources.openRawResource(R.raw.mock_shipment_api_response_copy)
                 .bufferedReader()
                 .use { it.readText() }
 

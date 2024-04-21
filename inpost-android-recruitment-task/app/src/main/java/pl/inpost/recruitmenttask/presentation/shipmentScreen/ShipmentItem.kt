@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pl.inpost.recruitmenttask.R
+import pl.inpost.recruitmenttask.domain.model.ShipmentStatus
 import pl.inpost.recruitmenttask.presentation.ui.theme.MontserratFontFamily
 
 @Composable
@@ -129,7 +130,7 @@ fun StatusSection(
                 modifier = Modifier.weight(0.4f)
             )
             Text(
-                text = shipmentUIModel.status.uppercase(),
+                text = stringResource(id = shipmentUIModel.status.nameRes),
                 color = colorResource(id = R.color.ShipmentCardTitleColor),
                 fontSize = 11.sp,
                 textAlign = TextAlign.End,
@@ -139,32 +140,34 @@ fun StatusSection(
             )
         }
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = shipmentUIModel.status,
-                color = colorResource(id = R.color.ShipmentCardValueBodyColor),
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                textAlign = TextAlign.Start,
-                fontFamily = MontserratFontFamily,
-                modifier = Modifier
-                    .weight(0.4f)
-                    .wrapContentWidth(align = Alignment.Start)
-            )
-            Text(
-                text = shipmentUIModel.date,
-                color = colorResource(id = R.color.ShipmentCardValueBodyColor),
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                textAlign = TextAlign.End,
-                fontFamily = MontserratFontFamily,
-                modifier = Modifier
-                    .weight(0.6f)
-                    .wrapContentWidth(align = Alignment.End)
-            )
+        if (!shipmentUIModel.date.isNullOrEmpty()) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(id = shipmentUIModel.status.nameRes),
+                    color = colorResource(id = R.color.ShipmentCardValueBodyColor),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    textAlign = TextAlign.Start,
+                    fontFamily = MontserratFontFamily,
+                    modifier = Modifier
+                        .weight(0.4f)
+                        .wrapContentWidth(align = Alignment.Start)
+                )
+                Text(
+                    text = shipmentUIModel.date,
+                    color = colorResource(id = R.color.ShipmentCardValueBodyColor),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    textAlign = TextAlign.End,
+                    fontFamily = MontserratFontFamily,
+                    modifier = Modifier
+                        .weight(0.6f)
+                        .wrapContentWidth(align = Alignment.End)
+                )
+            }
         }
     }
 }
@@ -220,7 +223,7 @@ fun ShipmentItemPreview() {
     ShipmentItem(
         shipmentUIModel = ShipmentUIType.ShipmentUIModel(
             shipmentNumber = "235678654323567889762231",
-            status = "Wydana do doręczenia",
+            status = ShipmentStatus.CONFIRMED,
             sender = "Serhii Radkivskyi",
             date = "pn. | 20.04.24 | 17:42"
         )
