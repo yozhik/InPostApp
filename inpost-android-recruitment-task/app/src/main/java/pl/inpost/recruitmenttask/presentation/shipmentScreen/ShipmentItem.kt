@@ -1,6 +1,7 @@
 package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ fun ShipmentItem(
     modifier: Modifier = Modifier,
     onArchiveItem: (String) -> Unit = {},
     onUnArchiveItem: (String) -> Unit = {},
+    onOpenDetails: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -50,6 +52,7 @@ fun ShipmentItem(
             )
             SenderSection(
                 shipmentUIModel,
+                onOpenDetails = onOpenDetails,
                 modifier = modifier.padding(top = 20.dp)
             )
         }
@@ -191,6 +194,7 @@ fun StatusSection(
 @Composable
 fun SenderSection(
     shipmentUIModel: ShipmentUIType.ShipmentUIModel,
+    onOpenDetails: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -215,7 +219,12 @@ fun SenderSection(
                 fontFamily = MontserratFontFamily
             )
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable(onClick = {
+                onOpenDetails(shipmentUIModel.shipmentNumber)
+            })
+        ) {
             Text(
                 text = stringResource(id = R.string.more),
                 color = colorResource(id = R.color.ShipmentCardValueBodyColor),

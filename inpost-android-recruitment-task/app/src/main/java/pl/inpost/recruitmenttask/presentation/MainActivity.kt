@@ -15,11 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.inpost.recruitmenttask.domain.model.ShipmentStatus
+import pl.inpost.recruitmenttask.presentation.navigation.AppNavigation
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.DividerItem
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentItem
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListScreen
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListViewModel
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUIType
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUiState
@@ -27,6 +29,8 @@ import pl.inpost.recruitmenttask.presentation.ui.theme.InpostAppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,7 +38,10 @@ class MainActivity : ComponentActivity() {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
             InpostAppTheme {
-                ShipmentListScreen(
+                navController = rememberNavController()
+
+                AppNavigation(
+                    navController = navController,
                     uiState = uiState,
                     onRefresh = viewModel::onRefresh,
                     onSortByStatus = viewModel::onSortByStatus,
@@ -45,7 +52,6 @@ class MainActivity : ComponentActivity() {
                     onShowArchivedShipments = viewModel::onShowArchivedShipments,
                     onArchiveItem = viewModel::onArchiveItem,
                     onUnArchiveItem = viewModel::onUnArchiveItem,
-                    modifier = Modifier
                 )
             }
         }
@@ -59,6 +65,7 @@ fun ShipmentContent(
     modifier: Modifier = Modifier,
     onArchiveItem: (String) -> Unit = {},
     onUnArchiveItem: (String) -> Unit = {},
+    onOpenDetails: (String) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -74,6 +81,7 @@ fun ShipmentContent(
                         shipmentUIModel = shipmentUIModel,
                         onArchiveItem = onArchiveItem,
                         onUnArchiveItem = onUnArchiveItem,
+                        onOpenDetails = onOpenDetails,
                         modifier = modifier
                     )
                 }

@@ -33,6 +33,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import pl.inpost.recruitmenttask.R
 import pl.inpost.recruitmenttask.presentation.ShipmentContent
 import pl.inpost.recruitmenttask.presentation.ui.theme.LoadingIndicator
@@ -41,6 +43,7 @@ import pl.inpost.recruitmenttask.presentation.ui.theme.LoadingIndicator
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShipmentListScreen(
+    modifier: Modifier = Modifier,
     uiState: ShipmentUiState,
     onRefresh: () -> Unit,
     onSortByStatus: () -> Unit,
@@ -51,7 +54,7 @@ fun ShipmentListScreen(
     onShowArchivedShipments: () -> Unit,
     onArchiveItem: (String) -> Unit,
     onUnArchiveItem: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onOpenDetails: (String) -> Unit,
 ) {
     var mDisplayMenu by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullToRefreshState()
@@ -151,6 +154,7 @@ fun ShipmentListScreen(
                     uiState = uiState,
                     onArchiveItem = onArchiveItem,
                     onUnArchiveItem = onUnArchiveItem,
+                    onOpenDetails = onOpenDetails,
                 )
 
                 PullToRefreshContainer(
