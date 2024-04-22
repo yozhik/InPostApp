@@ -76,6 +76,7 @@ dependencies {
 
     // Network JSON parsing
     implementation(libs.moshi)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     ksp(libs.moshi.kotlin.codegen)
 
     // Dependency Injection
