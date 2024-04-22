@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import pl.inpost.recruitmenttask.R
 import pl.inpost.recruitmenttask.presentation.ShipmentContent
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUiState
+import pl.inpost.recruitmenttask.presentation.ui.theme.ErrorDialog
 import pl.inpost.recruitmenttask.presentation.ui.theme.LoadingIndicator
 
 
@@ -54,6 +55,7 @@ fun ShipmentListScreen(
     onArchiveItem: (String) -> Unit,
     onUnArchiveItem: (String) -> Unit,
     onOpenDetails: (String) -> Unit,
+    onDismissDialog: () -> Unit,
 ) {
     var mDisplayMenu by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullToRefreshState()
@@ -170,6 +172,10 @@ fun ShipmentListScreen(
                         indicatorColor = Color.Yellow,
                         strokeWidth = 4.dp
                     )
+                }
+
+                uiState.errorMessage?.let {
+                    ErrorDialog(error = it, onDismiss = onDismissDialog)
                 }
             }
         }

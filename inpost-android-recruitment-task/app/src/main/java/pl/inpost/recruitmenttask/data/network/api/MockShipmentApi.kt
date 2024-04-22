@@ -17,6 +17,7 @@ import pl.inpost.recruitmenttask.data.network.model.ShipmentNetwork
 import pl.inpost.recruitmenttask.data.network.model.ShipmentStatus
 import pl.inpost.recruitmenttask.data.network.model.ShipmentType
 import pl.inpost.recruitmenttask.data.network.model.ShipmentsResponse
+import pl.inpost.recruitmenttask.data.utils.ResultContainer
 import java.time.ZonedDateTime
 import kotlin.random.Random
 
@@ -30,24 +31,25 @@ class MockShipmentApi(
             val json = context.resources.openRawResource(R.raw.mock_shipment_api_response_copy)
                 .bufferedReader()
                 .use { it.readText() }
-
+            //throw IllegalStateException("Failed to parse JSON")
             val jsonAdapter = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .add(apiTypeAdapter)
                 .build()
                 .adapter(ShipmentsResponse::class.java)
 
-            jsonAdapter.fromJson(json) as ShipmentsResponse
+            val result =
+                jsonAdapter.fromJson(json) ?: throw IllegalStateException("Failed to parse JSON")
+            ResultContainer.Success(result.shipments)  // Assuming ShipmentsResponse contains a List<ShipmentNetwork>
         } catch (e: Exception) {
-            Log.e("MockShipmentApi", "Failed to parse JSON", e)
-            null
+            ResultContainer.Error("Failed to parse JSON: ${e.message}", e)
         }
     }
 
-    override suspend fun getShipments(): List<ShipmentNetwork> {
+    override suspend fun getShipments(): ResultContainer<List<ShipmentNetwork>> {
         return withContext(Dispatchers.IO) {
-            delay(1000) //emulating network delay
-            response?.shipments ?: emptyList()
+            delay(1000)  // Emulating network delay
+            response
         }
     }
 }

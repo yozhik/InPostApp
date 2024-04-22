@@ -29,6 +29,7 @@ fun AppNavigation(
     onShowArchivedShipments: () -> Unit,
     onArchiveItem: (String) -> Unit,
     onUnArchiveItem: (String) -> Unit,
+    onDismissDialog: () -> Unit,
 ) {
     NavHost(
         navController,
@@ -61,6 +62,7 @@ fun AppNavigation(
                 onOpenDetails = { shipmentId ->
                     navController.navigate("${Screen.ShipmentDetails.route}/$shipmentId")
                 },
+                onDismissDialog = onDismissDialog,
                 modifier = Modifier
             )
         }

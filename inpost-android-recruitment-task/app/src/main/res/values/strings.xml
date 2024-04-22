@@ -29,6 +29,10 @@
     <string name="action_archive">Archive</string>
     <string name="action_unarchive">Unarchive</string>
 
+    <string name="error_title">Error</string>
+    <string name="ok_btn_title">Ok</string>
+
+
     <string name="more">more</string>
 
 </resources>

@@ -52,6 +52,7 @@ class MainActivity : ComponentActivity() {
                     onShowArchivedShipments = viewModel::onShowArchivedShipments,
                     onArchiveItem = viewModel::onArchiveItem,
                     onUnArchiveItem = viewModel::onUnArchiveItem,
+                    onDismissDialog = viewModel::clearError,
                 )
             }
         }

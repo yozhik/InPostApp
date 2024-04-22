@@ -13,7 +13,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import pl.inpost.recruitmenttask.data.utils.getErrorMessage
+import pl.inpost.recruitmenttask.data.utils.getSuccessDataOrNull
+import pl.inpost.recruitmenttask.data.utils.isSuccess
 import pl.inpost.recruitmenttask.domain.repository.ArchiveRepository
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.mapper.toUIModel
@@ -55,13 +57,15 @@ class ShipmentListViewModel @Inject constructor(
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByStatus()
                 .take(1)
-                .collectLatest { shipments ->
-                    shipmentList.addAll(shipments.toUIModel())
-                    shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Status"))
-                    _uiState.update {
-                        it.copy(
-                            shipmentList = shipmentList
-                        )
+                .collectLatest { shipmentsResult ->
+                    if (shipmentsResult.isSuccess) {
+                        shipmentsResult.getSuccessDataOrNull()?.let {
+                            shipmentList.addAll(it.toUIModel())
+                            shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Status"))
+                            updateList(shipmentList)
+                        }
+                    } else {
+                        showError(shipmentsResult.getErrorMessage())
                     }
                     hideLoading()
                 }
@@ -77,14 +81,17 @@ class ShipmentListViewModel @Inject constructor(
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByNumber()
                 .take(1)
-                .collectLatest { shipments ->
-                    shipmentList.addAll(shipments.toUIModel())
-                    shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Number"))
-                    _uiState.update {
-                        it.copy(
-                            shipmentList = shipmentList
-                        )
+                .collectLatest { shipmentsResult ->
+                    if (shipmentsResult.isSuccess) {
+                        shipmentsResult.getSuccessDataOrNull()?.let {
+                            shipmentList.addAll(it.toUIModel())
+                            shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Number"))
+                            updateList(shipmentList)
+                        }
+                    } else {
+                        showError(shipmentsResult.getErrorMessage())
                     }
+
                     hideLoading()
                 }
         }
@@ -99,13 +106,18 @@ class ShipmentListViewModel @Inject constructor(
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByPickupDate()
                 .take(1)
-                .collectLatest { shipments ->
-                    shipmentList.addAll(shipments.toUIModel())
-                    shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Pickup Date"))
-                    _uiState.update {
-                        it.copy(
-                            shipmentList = shipmentList
-                        )
+                .collectLatest { shipmentsResult ->
+                    if (shipmentsResult.isSuccess) {
+                        shipmentsResult.getSuccessDataOrNull()?.let {
+                            shipmentList.addAll(it.toUIModel())
+                            shipmentList.add(
+                                0,
+                                ShipmentUIType.DividerModel("Sorted by Pickup Date")
+                            )
+                            updateList(shipmentList)
+                        }
+                    } else {
+                        showError(shipmentsResult.getErrorMessage())
                     }
                     hideLoading()
                 }
@@ -121,13 +133,18 @@ class ShipmentListViewModel @Inject constructor(
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByExpiredDate()
                 .take(1)
-                .collectLatest { shipments ->
-                    shipmentList.addAll(shipments.toUIModel())
-                    shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Expire Date"))
-                    _uiState.update {
-                        it.copy(
-                            shipmentList = shipmentList
-                        )
+                .collectLatest { shipmentsResult ->
+                    if (shipmentsResult.isSuccess) {
+                        shipmentsResult.getSuccessDataOrNull()?.let {
+                            shipmentList.addAll(it.toUIModel())
+                            shipmentList.add(
+                                0,
+                                ShipmentUIType.DividerModel("Sorted by Expire Date")
+                            )
+                            updateList(shipmentList)
+                        }
+                    } else {
+                        showError(shipmentsResult.getErrorMessage())
                     }
                     hideLoading()
                 }
@@ -143,13 +160,18 @@ class ShipmentListViewModel @Inject constructor(
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByStoredDate()
                 .take(1)
-                .collectLatest { shipments ->
-                    shipmentList.addAll(shipments.toUIModel())
-                    shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Stored Date"))
-                    _uiState.update {
-                        it.copy(
-                            shipmentList = shipmentList
-                        )
+                .collectLatest { shipmentsResult ->
+                    if (shipmentsResult.isSuccess) {
+                        shipmentsResult.getSuccessDataOrNull()?.let {
+                            shipmentList.addAll(it.toUIModel())
+                            shipmentList.add(
+                                0,
+                                ShipmentUIType.DividerModel("Sorted by Stored Date")
+                            )
+                            updateList(shipmentList)
+                        }
+                    } else {
+                        showError(shipmentsResult.getErrorMessage())
                     }
                     hideLoading()
                 }
@@ -181,16 +203,18 @@ class ShipmentListViewModel @Inject constructor(
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getAllArchivedShipments()
                 .take(1)
-                .collectLatest { shipments ->
-                    shipments.forEach {
-                        val shipmentUIModel = it.toUIModel(isArchived = true)
-                        shipmentList.add(shipmentUIModel)
-                    }
-                    shipmentList.add(0, ShipmentUIType.DividerModel("Archived Shipments"))
-                    _uiState.update {
-                        it.copy(
-                            shipmentList = shipmentList
-                        )
+                .collectLatest { shipmentsResult ->
+                    if (shipmentsResult.isSuccess) {
+                        shipmentsResult.getSuccessDataOrNull()?.let { shipments->
+                            shipments.forEach {
+                                val shipmentUIModel = it.toUIModel(isArchived = true)
+                                shipmentList.add(shipmentUIModel)
+                            }
+                            shipmentList.add(0, ShipmentUIType.DividerModel("Archived Shipments"))
+                            updateList(shipmentList)
+                        }
+                    } else {
+                        showError(shipmentsResult.getErrorMessage())
                     }
                     hideLoading()
                 }
@@ -206,26 +230,24 @@ class ShipmentListViewModel @Inject constructor(
 
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.loadShipments()
-            shipmentRepository.shipments
                 .take(1)
-                .collectLatest { shipments ->
-                    shipmentList.addAll(shipments.toUIModel())
+                .collectLatest { shipmentsResult ->
+                    if (shipmentsResult.isSuccess) {
+                        shipmentsResult.getSuccessDataOrNull()?.let {
+                            shipmentList.addAll(it.toUIModel())
 
-                    //TODO: change with some constants and then fetch strings in View
-                    shipmentList.add(0, ShipmentUIType.DividerModel("Ready for shipment"))
-                    shipmentList.add(
-                        shipmentList.size - 1,
-                        ShipmentUIType.DividerModel("Pozostale")
-                    )
-
-                    withContext(Dispatchers.Main) {
-                        _uiState.update {
-                            it.copy(
-                                shipmentList = shipmentList
+                            //TODO: change with some constants and then fetch strings in View
+                            shipmentList.add(0, ShipmentUIType.DividerModel("Ready for shipment"))
+                            shipmentList.add(
+                                shipmentList.size - 1,
+                                ShipmentUIType.DividerModel("Pozostale")
                             )
+                            updateList(shipmentList)
                         }
-                        hideLoading()
+                    } else {
+                        showError(shipmentsResult.getErrorMessage())
                     }
+                    hideLoading()
                 }
         }
     }
@@ -278,6 +300,30 @@ class ShipmentListViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 isSwipeToRefreshLoading = false
+            )
+        }
+    }
+
+    private fun updateList(shipmentList: List<ShipmentUIType>) {
+        _uiState.update {
+            it.copy(
+                shipmentList = shipmentList
+            )
+        }
+    }
+
+    private fun showError(errorMessage: String) {
+        _uiState.update {
+            it.copy(
+                errorMessage = errorMessage
+            )
+        }
+    }
+
+    fun clearError() {
+        _uiState.update {
+            it.copy(
+                errorMessage = null
             )
         }
     }
