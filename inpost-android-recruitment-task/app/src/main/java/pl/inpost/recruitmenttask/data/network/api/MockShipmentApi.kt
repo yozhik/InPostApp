@@ -47,7 +47,7 @@ class MockShipmentApi(
 
     override suspend fun getShipments(): List<ShipmentNetwork> {
         return withContext(Dispatchers.IO) {
-            delay(1000)
+            delay(1000) //emulating network delay
             response?.shipments ?: emptyList()
         }
     }

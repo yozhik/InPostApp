@@ -1,10 +1,10 @@
 package pl.inpost.recruitmenttask.domain.repository
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import pl.inpost.recruitmenttask.data.localStorage.dataSource.ShipmentLocalDataSource
 import pl.inpost.recruitmenttask.data.localStorage.entities.ShipmentEntity
 import pl.inpost.recruitmenttask.data.localStorage.mappers.toEntities
@@ -21,60 +21,53 @@ class ShipmentRepository @Inject constructor(
         .map { it.map(ShipmentEntity::toDomain) }
 
     suspend fun loadShipments() {
-        withContext(Dispatchers.IO) {
-            val shipments = shipmentApi.getShipments()
-            shipmentLocalDataSource.insertItems(shipments.toEntities())
-        }
+        Log.d("RSD", "ShipmentRepository.loadShipments()")
+        val shipments = shipmentApi.getShipments()
+        shipmentLocalDataSource.insertItems(shipments.toEntities())
     }
 
-    suspend fun getSortedShipmentsByNumber(): Flow<List<Shipment>> {
-        return withContext(Dispatchers.IO) {
-            delay(300)
-            shipmentLocalDataSource
-                .getSortedShipmentsByNumber()
-                .map { it.toDomain() }
-        }
+    fun getSortedShipmentsByNumber(): Flow<List<Shipment>> {
+        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByNumber()")
+        return shipmentLocalDataSource
+            .getSortedShipmentsByNumber()
+            .map { it.toDomain() }
+            .flowOn(Dispatchers.IO)
     }
 
-    suspend fun getSortedShipmentsByStatus(): Flow<List<Shipment>> {
-        return withContext(Dispatchers.IO) {
-            delay(300)
-            shipmentLocalDataSource
-                .getSortedShipmentsByStatus()
-                .map { it.toDomain() }
-        }
+    fun getSortedShipmentsByStatus(): Flow<List<Shipment>> {
+        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByStatus()")
+        return shipmentLocalDataSource
+            .getSortedShipmentsByStatus()
+            .map { it.toDomain() }
+            .flowOn(Dispatchers.IO)
     }
 
-    suspend fun getSortedShipmentsByStoredDate(): Flow<List<Shipment>> {
-        return withContext(Dispatchers.IO) {
-            delay(300)
-            shipmentLocalDataSource
-                .getSortedShipmentsByStoredDate()
-                .map { it.toDomain() }
-        }
+    fun getSortedShipmentsByStoredDate(): Flow<List<Shipment>> {
+        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByStoredDate()")
+        return shipmentLocalDataSource
+            .getSortedShipmentsByStoredDate()
+            .map { it.toDomain() }
+            .flowOn(Dispatchers.IO)
     }
 
-    suspend fun getSortedShipmentsByExpiredDate(): Flow<List<Shipment>> {
-        return withContext(Dispatchers.IO) {
-            delay(300)
-            shipmentLocalDataSource.getSortedShipmentsByExpiredDate()
-                .map { it.toDomain() }
-        }
+    fun getSortedShipmentsByExpiredDate(): Flow<List<Shipment>> {
+        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByExpiredDate()")
+        return shipmentLocalDataSource.getSortedShipmentsByExpiredDate()
+            .map { it.toDomain() }
+            .flowOn(Dispatchers.IO)
     }
 
-    suspend fun getSortedShipmentsByPickupDate(): Flow<List<Shipment>> {
-        return withContext(Dispatchers.IO) {
-            delay(300)
-            shipmentLocalDataSource.getSortedShipmentsByPickupDate()
-                .map { it.toDomain() }
-        }
+    fun getSortedShipmentsByPickupDate(): Flow<List<Shipment>> {
+        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByPickupDate()")
+        return shipmentLocalDataSource.getSortedShipmentsByPickupDate()
+            .map { it.toDomain() }
+            .flowOn(Dispatchers.IO)
     }
 
-    suspend fun getAllArchivedShipments(): Flow<List<Shipment>> {
-        return withContext(Dispatchers.IO) {
-            delay(300)
-            shipmentLocalDataSource.getAllArchivedShipments()
-                .map { it.toDomain() }
-        }
+    fun getAllArchivedShipments(): Flow<List<Shipment>> {
+        Log.d("RSD", "ShipmentRepository.getAllArchivedShipments()")
+        return shipmentLocalDataSource.getAllArchivedShipments()
+            .map { it.toDomain() }
+            .flowOn(Dispatchers.IO)
     }
 }
