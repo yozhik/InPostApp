@@ -17,7 +17,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +42,7 @@ import pl.inpost.recruitmenttask.presentation.ui.theme.LoadingIndicator
 @Composable
 fun ShipmentListScreen(
     uiState: ShipmentUiState,
+    onRefresh: () -> Unit,
     onSortByStatus: () -> Unit,
     onSortByNumber: () -> Unit,
     onSortByPickupDate: () -> Unit,
@@ -49,6 +54,23 @@ fun ShipmentListScreen(
     modifier: Modifier = Modifier
 ) {
     var mDisplayMenu by remember { mutableStateOf(false) }
+    val pullRefreshState = rememberPullToRefreshState()
+
+    if (pullRefreshState.isRefreshing) {
+        LaunchedEffect(true) {
+            if (!uiState.isSwipeToRefreshLoading) {
+                onRefresh()
+            }
+        }
+    }
+
+    LaunchedEffect(uiState.isSwipeToRefreshLoading) {
+        if (uiState.isSwipeToRefreshLoading) {
+            pullRefreshState.startRefresh()
+        } else {
+            pullRefreshState.endRefresh()
+        }
+    }
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -120,14 +142,24 @@ fun ShipmentListScreen(
                 )
             }
         ) { paddingValues ->
-            Box(modifier = Modifier.padding(paddingValues)) {
+            Box(
+                modifier = Modifier
+                    .nestedScroll(pullRefreshState.nestedScrollConnection)
+                    .padding(paddingValues)
+            ) {
                 ShipmentContent(
                     uiState = uiState,
                     onArchiveItem = onArchiveItem,
                     onUnArchiveItem = onUnArchiveItem,
                 )
 
-                if (uiState.isLoading) {
+                PullToRefreshContainer(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    contentColor = colorResource(id = R.color.OrangeColor),
+                    state = pullRefreshState,
+                )
+
+                if (uiState.isLoading && !uiState.isSwipeToRefreshLoading) {
                     LoadingIndicator(
                         modifier = Modifier
                             .size(64.dp)

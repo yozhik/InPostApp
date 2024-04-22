@@ -37,6 +37,16 @@ class ShipmentListViewModel @Inject constructor(
         refreshData()
     }
 
+    fun onRefresh() {
+        _uiState.update {
+            it.copy(
+                isSwipeToRefreshLoading = true
+            )
+        }
+        Log.d("RSD", "onRefresh()")
+        refreshData()
+    }
+
     fun onSortByStatus() {
         Log.d("RSD", "onSortByStatus()")
         lastUserAction = LastUserAction.STATUS
@@ -292,7 +302,10 @@ class ShipmentListViewModel @Inject constructor(
     private fun hideLoading(from: String) {
         Log.d("RSD", "      hideLoading: $from")
         _uiState.update {
-            it.copy(isLoading = false)
+            it.copy(
+                isLoading = false,
+                isSwipeToRefreshLoading = false
+            )
         }
     }
 

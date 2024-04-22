@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
             InpostAppTheme {
                 ShipmentListScreen(
                     uiState = uiState,
+                    onRefresh = viewModel::onRefresh,
                     onSortByStatus = viewModel::onSortByStatus,
                     onSortByNumber = viewModel::onSortByNumber,
                     onSortByPickupDate = viewModel::onSortByPickupDate,
