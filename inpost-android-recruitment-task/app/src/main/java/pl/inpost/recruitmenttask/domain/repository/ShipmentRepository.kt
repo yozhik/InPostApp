@@ -16,8 +16,7 @@ class ShipmentRepository @Inject constructor(
     private val shipmentApi: ShipmentApi,
     private val shipmentLocalDataSource: ShipmentLocalDataSource,
 ) {
-    val shipments: Flow<List<Shipment>> = shipmentLocalDataSource.getAllShipments()
-        .map { it.map(ShipmentEntity::toDomain) }
+    val shipments: Flow<List<Shipment>> = getSortedShipments(shipmentLocalDataSource::getAllShipments)
 
     suspend fun loadShipments() {
         val shipments = shipmentApi.getShipments()
@@ -25,40 +24,31 @@ class ShipmentRepository @Inject constructor(
     }
 
     fun getSortedShipmentsByNumber(): Flow<List<Shipment>> {
-        return shipmentLocalDataSource
-            .getSortedShipmentsByNumber()
-            .map { it.toDomain() }
-            .flowOn(Dispatchers.IO)
+        return getSortedShipments(shipmentLocalDataSource::getSortedShipmentsByNumber)
     }
 
     fun getSortedShipmentsByStatus(): Flow<List<Shipment>> {
-        return shipmentLocalDataSource
-            .getSortedShipmentsByStatus()
-            .map { it.toDomain() }
-            .flowOn(Dispatchers.IO)
+        return getSortedShipments(shipmentLocalDataSource::getSortedShipmentsByStatus)
     }
 
     fun getSortedShipmentsByStoredDate(): Flow<List<Shipment>> {
-        return shipmentLocalDataSource
-            .getSortedShipmentsByStoredDate()
-            .map { it.toDomain() }
-            .flowOn(Dispatchers.IO)
+        return getSortedShipments(shipmentLocalDataSource::getSortedShipmentsByStoredDate)
     }
 
     fun getSortedShipmentsByExpiredDate(): Flow<List<Shipment>> {
-        return shipmentLocalDataSource.getSortedShipmentsByExpiredDate()
-            .map { it.toDomain() }
-            .flowOn(Dispatchers.IO)
+        return getSortedShipments(shipmentLocalDataSource::getSortedShipmentsByExpiredDate)
     }
 
     fun getSortedShipmentsByPickupDate(): Flow<List<Shipment>> {
-        return shipmentLocalDataSource.getSortedShipmentsByPickupDate()
-            .map { it.toDomain() }
-            .flowOn(Dispatchers.IO)
+        return getSortedShipments(shipmentLocalDataSource::getSortedShipmentsByPickupDate)
     }
 
     fun getAllArchivedShipments(): Flow<List<Shipment>> {
-        return shipmentLocalDataSource.getAllArchivedShipments()
+        return getSortedShipments(shipmentLocalDataSource::getAllArchivedShipments)
+    }
+
+    private fun getSortedShipments(getSortedShipmentsFunc: () -> Flow<List<ShipmentEntity>>): Flow<List<Shipment>> {
+        return getSortedShipmentsFunc()
             .map { it.toDomain() }
             .flowOn(Dispatchers.IO)
     }
