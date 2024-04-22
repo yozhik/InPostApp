@@ -8,11 +8,12 @@ fun List<Shipment>.toUIModel(): List<ShipmentUIType.ShipmentUIModel> {
     return this.map { it.toUIModel() }
 }
 
-fun Shipment.toUIModel(): ShipmentUIType.ShipmentUIModel {
+fun Shipment.toUIModel(isArchived:Boolean = false): ShipmentUIType.ShipmentUIModel {
     return ShipmentUIType.ShipmentUIModel(
         shipmentNumber = number,
         status = status,
         sender = sender?.name ?: sender?.email ?: sender?.phoneNumber ?: "",
         date = storedDate?.formatFullShipmentDateTime(),
+        archived = isArchived,
     )
 }

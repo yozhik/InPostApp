@@ -25,7 +25,9 @@
     <string name="action_sort_by_pickup_date">Sort by pickup date</string>
     <string name="action_sort_by_expire_date">Sort by expire date</string>
     <string name="action_sort_by_stored_date">Sort by stored date</string>
+    <string name="action_show_archived_items">Archived</string>
     <string name="action_archive">Archive</string>
+    <string name="action_unarchive">Unarchive</string>
 
 
     <string name="more">more</string>

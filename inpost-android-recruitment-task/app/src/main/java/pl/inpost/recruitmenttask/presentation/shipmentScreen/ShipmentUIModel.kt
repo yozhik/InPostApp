@@ -8,6 +8,7 @@ sealed interface ShipmentUIType {
         val status: ShipmentStatus,
         val sender: String = "",
         val date: String? = null,
+        val archived: Boolean = false,
     ) : ShipmentUIType
 
     data class DividerModel(

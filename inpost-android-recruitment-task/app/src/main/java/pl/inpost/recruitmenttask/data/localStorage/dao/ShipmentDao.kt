@@ -12,21 +12,24 @@ interface ShipmentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShipments(shipments: List<ShipmentEntity>)
 
-    @Query("SELECT * FROM shipments")
+    @Query("SELECT * FROM shipments WHERE number NOT IN (SELECT shipment_id FROM archived_shipments)")
     fun getAllShipments(): Flow<List<ShipmentEntity>>
 
-    @Query("SELECT * FROM shipments ORDER BY number ASC")
+    @Query("SELECT * FROM shipments WHERE number NOT IN (SELECT shipment_id FROM archived_shipments) ORDER BY number ASC")
     fun getSortedShipmentsByNumber(): Flow<List<ShipmentEntity>>
 
-    @Query("SELECT * FROM shipments ORDER BY status ASC")
+    @Query("SELECT * FROM shipments WHERE number NOT IN (SELECT shipment_id FROM archived_shipments) ORDER BY status ASC")
     fun getSortedShipmentsByStatus(): Flow<List<ShipmentEntity>>
 
-    @Query("SELECT * FROM shipments ORDER BY stored_date_timestamp ASC")
+    @Query("SELECT * FROM shipments WHERE number NOT IN (SELECT shipment_id FROM archived_shipments) ORDER BY stored_date_timestamp ASC")
     fun getSortedShipmentsByStoredDate(): Flow<List<ShipmentEntity>>
 
-    @Query("SELECT * FROM shipments ORDER BY expiry_date_timestamp DESC")
+    @Query("SELECT * FROM shipments WHERE number NOT IN (SELECT shipment_id FROM archived_shipments) ORDER BY expiry_date_timestamp DESC")
     fun getSortedShipmentsByExpiredDate(): Flow<List<ShipmentEntity>>
 
-    @Query("SELECT * FROM shipments ORDER BY pick_up_date_timestamp DESC")
+    @Query("SELECT * FROM shipments WHERE number NOT IN (SELECT shipment_id FROM archived_shipments) ORDER BY pick_up_date_timestamp DESC")
     fun getSortedShipmentsByPickupDate(): Flow<List<ShipmentEntity>>
+
+    @Query("SELECT * FROM shipments WHERE number IN (SELECT shipment_id FROM archived_shipments)")
+    fun getAllArchivedShipments(): Flow<List<ShipmentEntity>>
 }

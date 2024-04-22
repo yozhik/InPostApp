@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -33,6 +31,7 @@ fun ShipmentItem(
     shipmentUIModel: ShipmentUIType.ShipmentUIModel,
     modifier: Modifier = Modifier,
     onArchiveItem: (String) -> Unit = {},
+    onUnArchiveItem: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -44,7 +43,7 @@ fun ShipmentItem(
                 .background(color = Color.White)
                 .padding(20.dp)
         ) {
-            ParcelNumberSection(shipmentUIModel, onArchiveItem)
+            ParcelNumberSection(shipmentUIModel, onArchiveItem, onUnArchiveItem)
             StatusSection(
                 shipmentUIModel,
                 modifier = modifier.padding(top = 20.dp)
@@ -61,6 +60,7 @@ fun ShipmentItem(
 fun ParcelNumberSection(
     shipmentUIModel: ShipmentUIType.ShipmentUIModel,
     onArchiveItem: (String) -> Unit,
+    onUnArchiveItem: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -87,12 +87,26 @@ fun ParcelNumberSection(
         }
         Row {
             IconButton(
-                onClick = { onArchiveItem(shipmentUIModel.shipmentNumber) },
+                onClick = {
+                    if (shipmentUIModel.archived) {
+                        onUnArchiveItem(shipmentUIModel.shipmentNumber)
+                    } else {
+                        onArchiveItem(shipmentUIModel.shipmentNumber)
+                    }
+                },
                 modifier = Modifier
             ) {
                 Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = stringResource(id = R.string.action_archive),
+                    painter = if (shipmentUIModel.archived) {
+                        painterResource(id = R.drawable.ic_unarchive)
+                    } else {
+                        painterResource(id = R.drawable.ic_archive)
+                    },
+                    contentDescription = if (shipmentUIModel.archived) {
+                        stringResource(id = R.string.action_unarchive)
+                    } else {
+                        stringResource(id = R.string.action_archive)
+                    },
                     tint = colorResource(id = R.color.OrangeColor)
                 )
             }

@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import pl.inpost.recruitmenttask.data.localStorage.dao.ArchivedShipmentDao
 import pl.inpost.recruitmenttask.data.localStorage.dao.ShipmentDao
 import pl.inpost.recruitmenttask.data.localStorage.db.ShipmentDatabase
 
@@ -13,12 +14,17 @@ import pl.inpost.recruitmenttask.data.localStorage.db.ShipmentDatabase
 @Module
 class DatabaseModule {
     @Provides
-    fun provideShipmentNetworkItemDao(database: ShipmentDatabase): ShipmentDao {
-        return database.shipmentNetworkItemDao
+    fun provideDatabase(@ApplicationContext context: Context): ShipmentDatabase {
+        return ShipmentDatabase(context)
     }
 
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context): ShipmentDatabase {
-        return ShipmentDatabase(context)
+    fun provideShipmentNetworkItemDao(database: ShipmentDatabase): ShipmentDao {
+        return database.shipmentDao
+    }
+
+    @Provides
+    fun provideArchivedShipmentDao(database: ShipmentDatabase): ArchivedShipmentDao {
+        return database.archivedShipmentDao
     }
 }

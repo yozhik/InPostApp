@@ -5,7 +5,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import pl.inpost.recruitmenttask.data.localStorage.ShipmentLocalDataSource
+import pl.inpost.recruitmenttask.data.localStorage.dataSource.ShipmentLocalDataSource
 import pl.inpost.recruitmenttask.data.localStorage.entities.ShipmentEntity
 import pl.inpost.recruitmenttask.data.localStorage.mappers.toEntities
 import pl.inpost.recruitmenttask.data.network.api.ShipmentApi
@@ -66,6 +66,14 @@ class ShipmentRepository @Inject constructor(
         return withContext(Dispatchers.IO) {
             delay(300)
             shipmentLocalDataSource.getSortedShipmentsByPickupDate()
+                .map { it.toDomain() }
+        }
+    }
+
+    suspend fun getAllArchivedShipments(): Flow<List<Shipment>> {
+        return withContext(Dispatchers.IO) {
+            delay(300)
+            shipmentLocalDataSource.getAllArchivedShipments()
                 .map { it.toDomain() }
         }
     }

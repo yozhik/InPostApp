@@ -42,7 +42,9 @@ fun ShipmentListScreen(
     onSortByPickupDate: () -> Unit,
     onSortByExpireDate: () -> Unit,
     onSortByStoredDate: () -> Unit,
+    onShowArchivedShipments: () -> Unit,
     onArchiveItem: (String) -> Unit,
+    onUnArchiveItem: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var mDisplayMenu by remember { mutableStateOf(false) }
@@ -95,6 +97,12 @@ fun ShipmentListScreen(
                                     mDisplayMenu = false
                                     onSortByStoredDate()
                                 })
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(id = R.string.action_show_archived_items)) },
+                                onClick = {
+                                    mDisplayMenu = false
+                                    onShowArchivedShipments()
+                                })
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -106,7 +114,8 @@ fun ShipmentListScreen(
             Box(modifier = Modifier.padding(paddingValues)) {
                 ShipmentContent(
                     uiState = uiState,
-                    onArchiveItem = onArchiveItem
+                    onArchiveItem = onArchiveItem,
+                    onUnArchiveItem = onUnArchiveItem,
                 )
 
                 if (uiState.isLoading) {

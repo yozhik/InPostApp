@@ -5,13 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import pl.inpost.recruitmenttask.data.localStorage.dao.ArchivedShipmentDao
 import pl.inpost.recruitmenttask.data.localStorage.dao.ShipmentDao
+import pl.inpost.recruitmenttask.data.localStorage.entities.ArchivedEntity
 import pl.inpost.recruitmenttask.data.localStorage.entities.ShipmentEntity
 
-@Database(entities = [ShipmentEntity::class], version = 1)
+@Database(entities = [ShipmentEntity::class, ArchivedEntity::class], version = 1)
 @TypeConverters(TypeConverter::class)
 abstract class ShipmentDatabase : RoomDatabase() {
-    abstract val shipmentNetworkItemDao: ShipmentDao
+    abstract val shipmentDao: ShipmentDao
+    abstract val archivedShipmentDao: ArchivedShipmentDao
 
     companion object {
 

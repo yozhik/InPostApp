@@ -41,7 +41,9 @@ class MainActivity : ComponentActivity() {
                     onSortByPickupDate = viewModel::onSortByPickupDate,
                     onSortByExpireDate = viewModel::onSortByExpireDate,
                     onSortByStoredDate = viewModel::onSortByStoredDate,
+                    onShowArchivedShipments = viewModel::onShowArchivedShipments,
                     onArchiveItem = viewModel::onArchiveItem,
+                    onUnArchiveItem = viewModel::onUnArchiveItem,
                     modifier = Modifier
                 )
             }
@@ -55,6 +57,7 @@ fun ShipmentContent(
     uiState: ShipmentUiState,
     modifier: Modifier = Modifier,
     onArchiveItem: (String) -> Unit = {},
+    onUnArchiveItem: (String) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -69,6 +72,7 @@ fun ShipmentContent(
                     ShipmentItem(
                         shipmentUIModel = shipmentUIModel,
                         onArchiveItem = onArchiveItem,
+                        onUnArchiveItem = onUnArchiveItem,
                         modifier = modifier
                     )
                 }

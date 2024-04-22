@@ -1,6 +1,5 @@
 package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +11,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pl.inpost.recruitmenttask.domain.repository.ArchiveRepository
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.mapper.toUIModel
 import javax.inject.Inject
@@ -19,16 +19,21 @@ import javax.inject.Inject
 @HiltViewModel
 class ShipmentListViewModel @Inject constructor(
     private val shipmentRepository: ShipmentRepository,
+    private val archiveRepository: ArchiveRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ShipmentUiState())
     val uiState: StateFlow<ShipmentUiState> = _uiState.asStateFlow()
+
+    private var lastUserAction = LastUserAction.DEFAULT
 
     init {
         refreshData()
     }
 
     fun onSortByStatus() {
+        lastUserAction = LastUserAction.STATUS
+
         viewModelScope.launch {
             showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
@@ -46,6 +51,8 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onSortByNumber() {
+        lastUserAction = LastUserAction.NUMBER
+
         viewModelScope.launch {
             showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
@@ -63,6 +70,8 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onSortByPickupDate() {
+        lastUserAction = LastUserAction.PICKUP_DATE
+
         viewModelScope.launch {
             showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
@@ -80,6 +89,8 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onSortByExpireDate() {
+        lastUserAction = LastUserAction.EXPIRE_DATE
+
         viewModelScope.launch {
             showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
@@ -97,6 +108,8 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onSortByStoredDate() {
+        lastUserAction = LastUserAction.STORED_DATE
+
         viewModelScope.launch {
             showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
@@ -114,11 +127,44 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onArchiveItem(id: String) {
-        //TODO: implement
-        Log.d("RSD", "ShipmentListViewModel.onArchiveItem: $id")
+        viewModelScope.launch {
+            archiveRepository.archiveShipment(id)
+            repeatLastUserAction()
+        }
+    }
+
+    fun onUnArchiveItem(id: String) {
+        viewModelScope.launch {
+            archiveRepository.unArchiveShipment(id)
+            repeatLastUserAction()
+        }
+    }
+
+    fun onShowArchivedShipments() {
+        lastUserAction = LastUserAction.ARCHIVED
+
+        viewModelScope.launch {
+            showLoading()
+            val shipmentList = mutableListOf<ShipmentUIType>()
+            shipmentRepository.getAllArchivedShipments().collectLatest { shipments ->
+                shipments.forEach {
+                    val shipmentUIModel = it.toUIModel(isArchived = true)
+                    shipmentList.add(shipmentUIModel)
+                }
+                shipmentList.add(0, ShipmentUIType.DividerModel("Archived Shipments"))
+                _uiState.update {
+                    it.copy(
+                        shipmentList = shipmentList
+                    )
+                }
+                hideLoading()
+            }
+        }
     }
 
     private fun refreshData() {
+        lastUserAction = LastUserAction.DEFAULT
+
         viewModelScope.launch(Dispatchers.Main) {
             showLoading()
 
@@ -143,6 +189,19 @@ class ShipmentListViewModel @Inject constructor(
         }
     }
 
+    fun repeatLastUserAction() {
+        //calling this function to refresh data after archiving/unarchiving item
+        when (lastUserAction) {
+            LastUserAction.STATUS -> onSortByStatus()
+            LastUserAction.NUMBER -> onSortByNumber()
+            LastUserAction.PICKUP_DATE -> onSortByPickupDate()
+            LastUserAction.EXPIRE_DATE -> onSortByExpireDate()
+            LastUserAction.STORED_DATE -> onSortByStoredDate()
+            LastUserAction.ARCHIVED -> onShowArchivedShipments()
+            else -> refreshData()
+        }
+    }
+
     private fun showLoading() {
         _uiState.update {
             it.copy(isLoading = true)
@@ -154,4 +213,14 @@ class ShipmentListViewModel @Inject constructor(
             it.copy(isLoading = false)
         }
     }
+}
+
+enum class LastUserAction {
+    DEFAULT,
+    STATUS,
+    NUMBER,
+    PICKUP_DATE,
+    EXPIRE_DATE,
+    STORED_DATE,
+    ARCHIVED
 }
