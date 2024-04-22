@@ -42,3 +42,9 @@ enum class ShipmentStatus(
         }
     }
 }
+
+fun ShipmentStatus.readyToPickup(): Boolean {
+    return this == ShipmentStatus.READY_TO_PICKUP ||
+            this == ShipmentStatus.OUT_FOR_DELIVERY ||
+            this == ShipmentStatus.DELIVERED
+}
