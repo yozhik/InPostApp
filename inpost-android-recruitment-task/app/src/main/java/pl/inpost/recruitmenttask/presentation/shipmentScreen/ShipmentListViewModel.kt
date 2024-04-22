@@ -1,6 +1,5 @@
 package pl.inpost.recruitmenttask.presentation.shipmentScreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +17,8 @@ import kotlinx.coroutines.withContext
 import pl.inpost.recruitmenttask.domain.repository.ArchiveRepository
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.mapper.toUIModel
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUIType
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUiState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +34,6 @@ class ShipmentListViewModel @Inject constructor(
     private var currentJob: Job? = null
 
     init {
-        Log.d("RSD", "init")
         refreshData()
     }
 
@@ -43,22 +43,19 @@ class ShipmentListViewModel @Inject constructor(
                 isSwipeToRefreshLoading = true
             )
         }
-        Log.d("RSD", "onRefresh()")
         refreshData()
     }
 
     fun onSortByStatus() {
-        Log.d("RSD", "onSortByStatus()")
         lastUserAction = LastUserAction.STATUS
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            showLoading("onSortByStatus")
+            showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByStatus()
                 .take(1)
                 .collectLatest { shipments ->
-                    Log.d("RSD", "onSortByStatus: ${shipments.size} -> $shipments")
                     shipmentList.addAll(shipments.toUIModel())
                     shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Status"))
                     _uiState.update {
@@ -66,23 +63,21 @@ class ShipmentListViewModel @Inject constructor(
                             shipmentList = shipmentList
                         )
                     }
-                    hideLoading("onSortByStatus")
+                    hideLoading()
                 }
         }
     }
 
     fun onSortByNumber() {
-        Log.d("RSD", "onSortByNumber()")
         lastUserAction = LastUserAction.NUMBER
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            showLoading("onSortByNumber")
+            showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByNumber()
                 .take(1)
                 .collectLatest { shipments ->
-                    Log.d("RSD", "onSortByNumber: ${shipments.size} -> $shipments")
                     shipmentList.addAll(shipments.toUIModel())
                     shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Number"))
                     _uiState.update {
@@ -90,23 +85,21 @@ class ShipmentListViewModel @Inject constructor(
                             shipmentList = shipmentList
                         )
                     }
-                    hideLoading("onSortByNumber")
+                    hideLoading()
                 }
         }
     }
 
     fun onSortByPickupDate() {
-        Log.d("RSD", "onSortByPickupDate()")
         lastUserAction = LastUserAction.PICKUP_DATE
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            showLoading("onSortByPickupDate")
+            showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByPickupDate()
                 .take(1)
                 .collectLatest { shipments ->
-                    Log.d("RSD", "onSortByPickupDate: ${shipments.size} -> $shipments")
                     shipmentList.addAll(shipments.toUIModel())
                     shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Pickup Date"))
                     _uiState.update {
@@ -114,23 +107,21 @@ class ShipmentListViewModel @Inject constructor(
                             shipmentList = shipmentList
                         )
                     }
-                    hideLoading("onSortByPickupDate")
+                    hideLoading()
                 }
         }
     }
 
     fun onSortByExpireDate() {
-        Log.d("RSD", "onSortByExpireDate()")
         lastUserAction = LastUserAction.EXPIRE_DATE
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            showLoading("onSortByExpireDate")
+            showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByExpiredDate()
                 .take(1)
                 .collectLatest { shipments ->
-                    Log.d("RSD", "onSortByExpireDate: ${shipments.size} -> $shipments")
                     shipmentList.addAll(shipments.toUIModel())
                     shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Expire Date"))
                     _uiState.update {
@@ -138,23 +129,21 @@ class ShipmentListViewModel @Inject constructor(
                             shipmentList = shipmentList
                         )
                     }
-                    hideLoading("onSortByExpireDate")
+                    hideLoading()
                 }
         }
     }
 
     fun onSortByStoredDate() {
-        Log.d("RSD", "onSortByStoredDate()")
         lastUserAction = LastUserAction.STORED_DATE
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            showLoading("onSortByStoredDate")
+            showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByStoredDate()
                 .take(1)
                 .collectLatest { shipments ->
-                    Log.d("RSD", "onSortByStoredDate: ${shipments.size} -> $shipments")
                     shipmentList.addAll(shipments.toUIModel())
                     shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Stored Date"))
                     _uiState.update {
@@ -162,13 +151,12 @@ class ShipmentListViewModel @Inject constructor(
                             shipmentList = shipmentList
                         )
                     }
-                    hideLoading("onSortByStoredDate")
+                    hideLoading()
                 }
         }
     }
 
     fun onArchiveItem(id: String) {
-        Log.d("RSD", "onArchiveItem: $id")
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             archiveRepository.archiveShipment(id)
@@ -177,7 +165,6 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onUnArchiveItem(id: String) {
-        Log.d("RSD", "onUnArchiveItem: $id")
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             archiveRepository.unArchiveShipment(id)
@@ -186,17 +173,15 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onShowArchivedShipments() {
-        Log.d("RSD", "onShowArchivedShipments()")
         lastUserAction = LastUserAction.ARCHIVED
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            showLoading("onShowArchivedShipments")
+            showLoading()
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getAllArchivedShipments()
                 .take(1)
                 .collectLatest { shipments ->
-                    Log.d("RSD", "onShowArchivedShipments: ${shipments.size} -> $shipments")
                     shipments.forEach {
                         val shipmentUIModel = it.toUIModel(isArchived = true)
                         shipmentList.add(shipmentUIModel)
@@ -207,25 +192,23 @@ class ShipmentListViewModel @Inject constructor(
                             shipmentList = shipmentList
                         )
                     }
-                    hideLoading("onShowArchivedShipments")
+                    hideLoading()
                 }
         }
     }
 
     private fun refreshData() {
-        Log.d("RSD", "refreshData()")
         lastUserAction = LastUserAction.DEFAULT
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch(Dispatchers.Main) {
-            showLoading("refreshData")
+            showLoading()
 
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.loadShipments()
             shipmentRepository.shipments
                 .take(1)
                 .collectLatest { shipments ->
-                    Log.d("RSD", "on refreshData: ${shipments.size} -> $shipments")
                     shipmentList.addAll(shipments.toUIModel())
 
                     //TODO: change with some constants and then fetch strings in View
@@ -241,55 +224,46 @@ class ShipmentListViewModel @Inject constructor(
                                 shipmentList = shipmentList
                             )
                         }
-                        hideLoading("refreshData")
+                        hideLoading()
                     }
                 }
         }
     }
 
     private fun repeatLastUserAction() {
-        Log.d("RSD", "repeatLastUserAction() entering, lastUserAction: $lastUserAction")
         when (lastUserAction) {
             LastUserAction.STATUS -> {
-                Log.d("RSD", "Executing onSortByStatus")
                 onSortByStatus()
             }
 
             LastUserAction.NUMBER -> {
-                Log.d("RSD", "Executing onSortByNumber")
                 onSortByNumber()
             }
 
             LastUserAction.PICKUP_DATE -> {
-                Log.d("RSD", "Executing onSortByPickupDate")
                 onSortByPickupDate()
             }
 
             LastUserAction.EXPIRE_DATE -> {
-                Log.d("RSD", "Executing onSortByExpireDate")
                 onSortByExpireDate()
             }
 
             LastUserAction.STORED_DATE -> {
-                Log.d("RSD", "Executing onSortByStoredDate")
                 onSortByStoredDate()
             }
 
             LastUserAction.ARCHIVED -> {
-                Log.d("RSD", "Executing onShowArchivedShipments")
                 onShowArchivedShipments()
             }
 
             else -> {
-                Log.d("RSD", "Executing refreshData")
                 refreshData()
             }
         }
     }
 
 
-    private suspend fun showLoading(from: String) {
-        Log.d("RSD", "      showLoading: $from")
+    private suspend fun showLoading() {
         _uiState.update {
             it.copy(isLoading = true)
         }
@@ -299,8 +273,7 @@ class ShipmentListViewModel @Inject constructor(
         delay(USER_ACTION_FRIENDLY_DELAY)
     }
 
-    private fun hideLoading(from: String) {
-        Log.d("RSD", "      hideLoading: $from")
+    private fun hideLoading() {
         _uiState.update {
             it.copy(
                 isLoading = false,

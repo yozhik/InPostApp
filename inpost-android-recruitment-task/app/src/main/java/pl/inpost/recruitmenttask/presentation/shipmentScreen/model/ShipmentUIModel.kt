@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.presentation.shipmentScreen
+package pl.inpost.recruitmenttask.presentation.shipmentScreen.model
 
 import pl.inpost.recruitmenttask.domain.model.ShipmentStatus
 

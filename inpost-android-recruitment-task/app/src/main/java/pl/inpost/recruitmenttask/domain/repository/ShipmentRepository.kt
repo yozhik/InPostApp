@@ -1,6 +1,5 @@
 package pl.inpost.recruitmenttask.domain.repository
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -21,13 +20,11 @@ class ShipmentRepository @Inject constructor(
         .map { it.map(ShipmentEntity::toDomain) }
 
     suspend fun loadShipments() {
-        Log.d("RSD", "ShipmentRepository.loadShipments()")
         val shipments = shipmentApi.getShipments()
         shipmentLocalDataSource.insertItems(shipments.toEntities())
     }
 
     fun getSortedShipmentsByNumber(): Flow<List<Shipment>> {
-        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByNumber()")
         return shipmentLocalDataSource
             .getSortedShipmentsByNumber()
             .map { it.toDomain() }
@@ -35,7 +32,6 @@ class ShipmentRepository @Inject constructor(
     }
 
     fun getSortedShipmentsByStatus(): Flow<List<Shipment>> {
-        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByStatus()")
         return shipmentLocalDataSource
             .getSortedShipmentsByStatus()
             .map { it.toDomain() }
@@ -43,7 +39,6 @@ class ShipmentRepository @Inject constructor(
     }
 
     fun getSortedShipmentsByStoredDate(): Flow<List<Shipment>> {
-        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByStoredDate()")
         return shipmentLocalDataSource
             .getSortedShipmentsByStoredDate()
             .map { it.toDomain() }
@@ -51,21 +46,18 @@ class ShipmentRepository @Inject constructor(
     }
 
     fun getSortedShipmentsByExpiredDate(): Flow<List<Shipment>> {
-        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByExpiredDate()")
         return shipmentLocalDataSource.getSortedShipmentsByExpiredDate()
             .map { it.toDomain() }
             .flowOn(Dispatchers.IO)
     }
 
     fun getSortedShipmentsByPickupDate(): Flow<List<Shipment>> {
-        Log.d("RSD", "ShipmentRepository.getSortedShipmentsByPickupDate()")
         return shipmentLocalDataSource.getSortedShipmentsByPickupDate()
             .map { it.toDomain() }
             .flowOn(Dispatchers.IO)
     }
 
     fun getAllArchivedShipments(): Flow<List<Shipment>> {
-        Log.d("RSD", "ShipmentRepository.getAllArchivedShipments()")
         return shipmentLocalDataSource.getAllArchivedShipments()
             .map { it.toDomain() }
             .flowOn(Dispatchers.IO)

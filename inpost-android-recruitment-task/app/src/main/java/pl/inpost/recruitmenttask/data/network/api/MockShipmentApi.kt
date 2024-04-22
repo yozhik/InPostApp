@@ -43,7 +43,6 @@ class MockShipmentApi(
             null
         }
     }
-    private var firstUse = true
 
     override suspend fun getShipments(): List<ShipmentNetwork> {
         return withContext(Dispatchers.IO) {

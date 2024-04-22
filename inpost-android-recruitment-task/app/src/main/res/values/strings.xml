@@ -20,8 +20,6 @@
     <string name="card_status_capital">STATUS</string>
     <string name="card_sender_capital">SENDER</string>
 
-    <string name="card_receiver_capital">RECEIVER</string>
-
     <string name="action_sort_by_status">Sort by status</string>
     <string name="action_sort_by_number">Sort by number</string>
     <string name="action_sort_by_pickup_date">Sort by pickup date</string>
@@ -30,7 +28,6 @@
     <string name="action_show_archived_items">Archived</string>
     <string name="action_archive">Archive</string>
     <string name="action_unarchive">Unarchive</string>
-
 
     <string name="more">more</string>
 

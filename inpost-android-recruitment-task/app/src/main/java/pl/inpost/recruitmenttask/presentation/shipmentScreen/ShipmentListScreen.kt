@@ -33,10 +33,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import pl.inpost.recruitmenttask.R
 import pl.inpost.recruitmenttask.presentation.ShipmentContent
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUiState
 import pl.inpost.recruitmenttask.presentation.ui.theme.LoadingIndicator
 
 

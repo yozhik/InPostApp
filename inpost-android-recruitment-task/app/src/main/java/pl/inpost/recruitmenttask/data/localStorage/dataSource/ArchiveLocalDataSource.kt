@@ -8,15 +8,11 @@ import javax.inject.Inject
 class ArchiveLocalDataSource @Inject constructor(
     private val archivedShipmentDao: ArchivedShipmentDao,
 ) {
-    fun getAllArchivedShipments(): Flow<List<ArchivedEntity>> {
-        return archivedShipmentDao.getAllArchivedShipments()
-    }
-
-    fun archiveShipment(shipmentId: String) {
+    suspend fun archiveShipment(shipmentId: String) {
         archivedShipmentDao.archiveShipment(ArchivedEntity(shipmentId))
     }
 
-    fun unArchiveShipment(shipmentId: String) {
+    suspend fun unArchiveShipment(shipmentId: String) {
         archivedShipmentDao.unArchiveShipment(ArchivedEntity(shipmentId))
     }
 }

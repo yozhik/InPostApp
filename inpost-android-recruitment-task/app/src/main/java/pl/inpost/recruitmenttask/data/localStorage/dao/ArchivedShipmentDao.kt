@@ -11,11 +11,11 @@ import pl.inpost.recruitmenttask.data.localStorage.entities.ArchivedEntity
 @Dao
 interface ArchivedShipmentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun archiveShipment(shipmentId: ArchivedEntity)
+    suspend fun archiveShipment(shipmentId: ArchivedEntity)
 
     @Query("SELECT * FROM archived_shipments")
     fun getAllArchivedShipments(): Flow<List<ArchivedEntity>>
 
     @Delete
-    fun unArchiveShipment(shipmentId: ArchivedEntity)
+    suspend fun unArchiveShipment(shipmentId: ArchivedEntity)
 }

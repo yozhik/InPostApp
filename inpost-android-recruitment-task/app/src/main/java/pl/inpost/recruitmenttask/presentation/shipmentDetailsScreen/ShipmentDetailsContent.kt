@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pl.inpost.recruitmenttask.R
 import pl.inpost.recruitmenttask.domain.model.ShipmentStatus
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUIType
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUIType
 import pl.inpost.recruitmenttask.presentation.ui.theme.MontserratFontFamily
 
 @Composable

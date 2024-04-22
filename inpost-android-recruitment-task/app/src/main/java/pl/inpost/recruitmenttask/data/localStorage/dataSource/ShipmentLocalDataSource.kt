@@ -1,15 +1,12 @@
 package pl.inpost.recruitmenttask.data.localStorage.dataSource
 
 import kotlinx.coroutines.flow.Flow
-import pl.inpost.recruitmenttask.data.localStorage.dao.ArchivedShipmentDao
 import pl.inpost.recruitmenttask.data.localStorage.dao.ShipmentDao
-import pl.inpost.recruitmenttask.data.localStorage.entities.ArchivedEntity
 import pl.inpost.recruitmenttask.data.localStorage.entities.ShipmentEntity
 import javax.inject.Inject
 
 class ShipmentLocalDataSource @Inject constructor(
     private val shipmentDao: ShipmentDao,
-    private val archivedShipmentDao: ArchivedShipmentDao,
 ) {
     fun getAllShipments(): Flow<List<ShipmentEntity>> = shipmentDao.getAllShipments()
     fun getSortedShipmentsByNumber(): Flow<List<ShipmentEntity>> =

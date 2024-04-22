@@ -24,5 +24,9 @@
     <string name="action_sort_by_pickup_date">Sortuj według daty odbioru</string>
     <string name="action_sort_by_expire_date">Sortuj według daty ważności</string>
     <string name="action_sort_by_stored_date">Sortuj według zapisanej daty</string>
+    <string name="action_show_archived_items">Zarchiwizowane</string>
     <string name="action_archive">Archiwizuj</string>
+    <string name="action_unarchive">Przywróć</string>
+
+    <string name="more">więcej</string>
 </resources>

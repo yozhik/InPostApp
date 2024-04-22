@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.presentation.shipmentScreen
+package pl.inpost.recruitmenttask.presentation.shipmentScreen.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -56,6 +56,8 @@ fun DividerItem(
 fun DividerPreview() {
     DividerItem(
         title = "Title",
-        modifier = Modifier.fillMaxWidth().wrapContentSize()
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentSize()
     )
 }

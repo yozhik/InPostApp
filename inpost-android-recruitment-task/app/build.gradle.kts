@@ -108,7 +108,6 @@ dependencies {
 
 /*
 This is a hack to allow KAPT and the Android Gradle 8.0 plugin to coexist.
-Ideally we would just use KSP instead but as of 1/3/2024, support is still in alpha.
  */
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs>().configureEach {
     kotlinOptions {

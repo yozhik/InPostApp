@@ -20,11 +20,11 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.inpost.recruitmenttask.domain.model.ShipmentStatus
 import pl.inpost.recruitmenttask.presentation.navigation.AppNavigation
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.DividerItem
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentItem
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListViewModel
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUIType
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUiState
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUIType
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUiState
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.ui.DividerItem
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.ui.ShipmentItem
 import pl.inpost.recruitmenttask.presentation.ui.theme.InpostAppTheme
 
 @AndroidEntryPoint

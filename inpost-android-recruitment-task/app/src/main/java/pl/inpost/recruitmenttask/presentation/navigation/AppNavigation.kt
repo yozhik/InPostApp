@@ -13,8 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pl.inpost.recruitmenttask.presentation.shipmentDetailsScreen.ShipmentDetailsScreen
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListScreen
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUIType
-import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentUiState
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUIType
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUiState
 
 @Composable
 fun AppNavigation(
