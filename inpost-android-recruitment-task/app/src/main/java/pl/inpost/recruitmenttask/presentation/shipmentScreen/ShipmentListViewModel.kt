@@ -15,11 +15,15 @@ import kotlinx.coroutines.launch
 import pl.inpost.recruitmenttask.data.utils.getErrorMessage
 import pl.inpost.recruitmenttask.data.utils.getSuccessDataOrNull
 import pl.inpost.recruitmenttask.data.utils.isSuccess
+import pl.inpost.recruitmenttask.domain.model.SortType
 import pl.inpost.recruitmenttask.domain.repository.ArchiveRepository
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.mapper.toUIModel
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.LastUserAction
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUIType
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUiState
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.toLastUserAction
+import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.toTitle
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,54 +51,11 @@ class ShipmentListViewModel @Inject constructor(
         refreshData()
     }
 
-    fun onSortByStatus() {
-        lastUserAction = LastUserAction.STATUS
-
+    fun onSort(sortType: SortType) {
+        lastUserAction = sortType.toLastUserAction()
         launchJob {
             val shipmentList = mutableListOf<ShipmentUIType>()
-            shipmentRepository.getSortedShipmentsByStatus()
-                .take(1)
-                .collectLatest { shipmentsResult ->
-                    if (shipmentsResult.isSuccess) {
-                        shipmentsResult.getSuccessDataOrNull()?.let {
-                            shipmentList.addAll(it.toUIModel())
-                            shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Status"))
-                            updateList(shipmentList)
-                        }
-                    } else {
-                        showError(shipmentsResult.getErrorMessage())
-                    }
-                }
-        }
-    }
-
-    fun onSortByNumber() {
-        lastUserAction = LastUserAction.NUMBER
-
-        launchJob {
-            val shipmentList = mutableListOf<ShipmentUIType>()
-            shipmentRepository.getSortedShipmentsByNumber()
-                .take(1)
-                .collectLatest { shipmentsResult ->
-                    if (shipmentsResult.isSuccess) {
-                        shipmentsResult.getSuccessDataOrNull()?.let {
-                            shipmentList.addAll(it.toUIModel())
-                            shipmentList.add(0, ShipmentUIType.DividerModel("Sorted by Number"))
-                            updateList(shipmentList)
-                        }
-                    } else {
-                        showError(shipmentsResult.getErrorMessage())
-                    }
-                }
-        }
-
-    }
-
-    fun onSortByPickupDate() {
-        lastUserAction = LastUserAction.PICKUP_DATE
-        launchJob {
-            val shipmentList = mutableListOf<ShipmentUIType>()
-            shipmentRepository.getSortedShipmentsByPickupDate()
+            shipmentRepository.getSortedByType(sortType)
                 .take(1)
                 .collectLatest { shipmentsResult ->
                     if (shipmentsResult.isSuccess) {
@@ -102,62 +63,13 @@ class ShipmentListViewModel @Inject constructor(
                             shipmentList.addAll(it.toUIModel())
                             shipmentList.add(
                                 0,
-                                ShipmentUIType.DividerModel("Sorted by Pickup Date")
+                                ShipmentUIType.DividerModel(sortType.toTitle())
                             )
                             updateList(shipmentList)
                         }
                     } else {
                         showError(shipmentsResult.getErrorMessage())
                     }
-                }
-        }
-    }
-
-    fun onSortByExpireDate() {
-        lastUserAction = LastUserAction.EXPIRE_DATE
-        launchJob {
-            val shipmentList = mutableListOf<ShipmentUIType>()
-            shipmentRepository.getSortedShipmentsByExpiredDate()
-                .take(1)
-                .collectLatest { shipmentsResult ->
-                    if (shipmentsResult.isSuccess) {
-                        shipmentsResult.getSuccessDataOrNull()?.let {
-                            shipmentList.addAll(it.toUIModel())
-                            shipmentList.add(
-                                0,
-                                ShipmentUIType.DividerModel("Sorted by Expire Date")
-                            )
-                            updateList(shipmentList)
-                        }
-                    } else {
-                        showError(shipmentsResult.getErrorMessage())
-                    }
-                    hideLoading()
-                }
-        }
-    }
-
-    fun onSortByStoredDate() {
-        lastUserAction = LastUserAction.STORED_DATE
-
-        launchJob {
-            val shipmentList = mutableListOf<ShipmentUIType>()
-            shipmentRepository.getSortedShipmentsByStoredDate()
-                .take(1)
-                .collectLatest { shipmentsResult ->
-                    if (shipmentsResult.isSuccess) {
-                        shipmentsResult.getSuccessDataOrNull()?.let {
-                            shipmentList.addAll(it.toUIModel())
-                            shipmentList.add(
-                                0,
-                                ShipmentUIType.DividerModel("Sorted by Stored Date")
-                            )
-                            updateList(shipmentList)
-                        }
-                    } else {
-                        showError(shipmentsResult.getErrorMessage())
-                    }
-                    hideLoading()
                 }
         }
     }
@@ -228,33 +140,13 @@ class ShipmentListViewModel @Inject constructor(
 
     private fun repeatLastUserAction() {
         when (lastUserAction) {
-            LastUserAction.STATUS -> {
-                onSortByStatus()
-            }
-
-            LastUserAction.NUMBER -> {
-                onSortByNumber()
-            }
-
-            LastUserAction.PICKUP_DATE -> {
-                onSortByPickupDate()
-            }
-
-            LastUserAction.EXPIRE_DATE -> {
-                onSortByExpireDate()
-            }
-
-            LastUserAction.STORED_DATE -> {
-                onSortByStoredDate()
-            }
-
-            LastUserAction.ARCHIVED -> {
-                onShowArchivedShipments()
-            }
-
-            else -> {
-                refreshData()
-            }
+            LastUserAction.STATUS -> onSort(SortType.ByStatus)
+            LastUserAction.NUMBER -> onSort(SortType.ByNumber)
+            LastUserAction.PICKUP_DATE -> onSort(SortType.ByPickupDate)
+            LastUserAction.EXPIRE_DATE -> onSort(SortType.ByExpireDate)
+            LastUserAction.STORED_DATE -> onSort(SortType.ByStoredDate)
+            LastUserAction.ARCHIVED -> onShowArchivedShipments()
+            else -> refreshData()
         }
     }
 
@@ -314,14 +206,4 @@ class ShipmentListViewModel @Inject constructor(
     companion object {
         private const val USER_ACTION_FRIENDLY_DELAY: Long = 100L
     }
-}
-
-enum class LastUserAction {
-    DEFAULT,
-    STATUS,
-    NUMBER,
-    PICKUP_DATE,
-    EXPIRE_DATE,
-    STORED_DATE,
-    ARCHIVED
 }

@@ -12,6 +12,7 @@ import pl.inpost.recruitmenttask.data.localStorage.mappers.toEntities
 import pl.inpost.recruitmenttask.data.network.api.ShipmentApi
 import pl.inpost.recruitmenttask.data.utils.ResultContainer
 import pl.inpost.recruitmenttask.domain.model.Shipment
+import pl.inpost.recruitmenttask.domain.model.SortType
 import pl.inpost.recruitmenttask.domain.model.mappers.toDomain
 import javax.inject.Inject
 
@@ -29,9 +30,15 @@ class ShipmentRepository @Inject constructor(
                             emit(it)
                         }
                     } catch (e: Exception) {
-                        emit(ResultContainer.Error("Failed to insert items into the database: ${e.message}", e))
+                        emit(
+                            ResultContainer.Error(
+                                "Failed to insert items into the database: ${e.message}",
+                                e
+                            )
+                        )
                     }
                 }
+
                 is ResultContainer.Error -> {
                     emit(result)
                 }
@@ -72,5 +79,15 @@ class ShipmentRepository @Inject constructor(
                 )
             }
             .flowOn(Dispatchers.IO)
+    }
+
+    fun getSortedByType(type: SortType): Flow<ResultContainer<List<Shipment>>> {
+        return when (type) {
+            SortType.ByStatus -> getSortedShipmentsByStatus()
+            SortType.ByNumber -> getSortedShipmentsByNumber()
+            SortType.ByPickupDate -> getSortedShipmentsByPickupDate()
+            SortType.ByExpireDate -> getSortedShipmentsByExpiredDate()
+            SortType.ByStoredDate -> getSortedShipmentsByStoredDate()
+        }
     }
 }

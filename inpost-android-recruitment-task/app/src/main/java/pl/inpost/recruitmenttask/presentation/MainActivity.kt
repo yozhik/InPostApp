@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.inpost.recruitmenttask.domain.model.ShipmentStatus
+import pl.inpost.recruitmenttask.domain.model.SortType
 import pl.inpost.recruitmenttask.presentation.navigation.AppNavigation
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.ShipmentListViewModel
 import pl.inpost.recruitmenttask.presentation.shipmentScreen.model.ShipmentUIType
@@ -44,11 +45,11 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     uiState = uiState,
                     onRefresh = viewModel::onRefresh,
-                    onSortByStatus = viewModel::onSortByStatus,
-                    onSortByNumber = viewModel::onSortByNumber,
-                    onSortByPickupDate = viewModel::onSortByPickupDate,
-                    onSortByExpireDate = viewModel::onSortByExpireDate,
-                    onSortByStoredDate = viewModel::onSortByStoredDate,
+                    onSortByStatus = { viewModel.onSort(SortType.ByStatus) },
+                    onSortByNumber = { viewModel.onSort(SortType.ByNumber) },
+                    onSortByPickupDate = { viewModel.onSort(SortType.ByPickupDate) },
+                    onSortByExpireDate = { viewModel.onSort(SortType.ByExpireDate) },
+                    onSortByStoredDate = { viewModel.onSort(SortType.ByStoredDate) },
                     onShowArchivedShipments = viewModel::onShowArchivedShipments,
                     onArchiveItem = viewModel::onArchiveItem,
                     onUnArchiveItem = viewModel::onUnArchiveItem,
