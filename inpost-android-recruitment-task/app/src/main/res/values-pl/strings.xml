@@ -28,5 +28,8 @@
     <string name="action_archive">Archiwizuj</string>
     <string name="action_unarchive">Przywróć</string>
 
+    <string name="error_title">Błąd</string>
+    <string name="ok_btn_title">OK</string>
+
     <string name="more">więcej</string>
 </resources>
