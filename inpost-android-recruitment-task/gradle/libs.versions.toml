@@ -20,12 +20,16 @@ androidxLifecycle = "2.7.0"
 desugar_jdk_libs_version = "2.0.4"
 nav_version = "2.7.7"
 mockito_version = "5.11.0"
+mockito_inline_version = "5.1.0"
+kotlin_coroutines_test_version = "1.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito_version" }
+mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mockito_inline_version" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin_coroutines_test_version" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 
