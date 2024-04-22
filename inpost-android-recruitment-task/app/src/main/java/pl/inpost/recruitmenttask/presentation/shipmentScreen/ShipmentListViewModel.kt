@@ -3,7 +3,6 @@ package pl.inpost.recruitmenttask.presentation.shipmentScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,9 +50,7 @@ class ShipmentListViewModel @Inject constructor(
     fun onSortByStatus() {
         lastUserAction = LastUserAction.STATUS
 
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch {
-            showLoading()
+        launchJob {
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByStatus()
                 .take(1)
@@ -67,7 +64,6 @@ class ShipmentListViewModel @Inject constructor(
                     } else {
                         showError(shipmentsResult.getErrorMessage())
                     }
-                    hideLoading()
                 }
         }
     }
@@ -75,9 +71,7 @@ class ShipmentListViewModel @Inject constructor(
     fun onSortByNumber() {
         lastUserAction = LastUserAction.NUMBER
 
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch {
-            showLoading()
+        launchJob {
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByNumber()
                 .take(1)
@@ -91,18 +85,14 @@ class ShipmentListViewModel @Inject constructor(
                     } else {
                         showError(shipmentsResult.getErrorMessage())
                     }
-
-                    hideLoading()
                 }
         }
+
     }
 
     fun onSortByPickupDate() {
         lastUserAction = LastUserAction.PICKUP_DATE
-
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch {
-            showLoading()
+        launchJob {
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByPickupDate()
                 .take(1)
@@ -119,17 +109,13 @@ class ShipmentListViewModel @Inject constructor(
                     } else {
                         showError(shipmentsResult.getErrorMessage())
                     }
-                    hideLoading()
                 }
         }
     }
 
     fun onSortByExpireDate() {
         lastUserAction = LastUserAction.EXPIRE_DATE
-
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch {
-            showLoading()
+        launchJob {
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByExpiredDate()
                 .take(1)
@@ -154,9 +140,7 @@ class ShipmentListViewModel @Inject constructor(
     fun onSortByStoredDate() {
         lastUserAction = LastUserAction.STORED_DATE
 
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch {
-            showLoading()
+        launchJob {
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getSortedShipmentsByStoredDate()
                 .take(1)
@@ -179,16 +163,14 @@ class ShipmentListViewModel @Inject constructor(
     }
 
     fun onArchiveItem(id: String) {
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch {
+        launchJob {
             archiveRepository.archiveShipment(id)
             repeatLastUserAction()
         }
     }
 
     fun onUnArchiveItem(id: String) {
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch {
+        launchJob {
             archiveRepository.unArchiveShipment(id)
             repeatLastUserAction()
         }
@@ -197,15 +179,13 @@ class ShipmentListViewModel @Inject constructor(
     fun onShowArchivedShipments() {
         lastUserAction = LastUserAction.ARCHIVED
 
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch {
-            showLoading()
+        launchJob {
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.getAllArchivedShipments()
                 .take(1)
                 .collectLatest { shipmentsResult ->
                     if (shipmentsResult.isSuccess) {
-                        shipmentsResult.getSuccessDataOrNull()?.let { shipments->
+                        shipmentsResult.getSuccessDataOrNull()?.let { shipments ->
                             shipments.forEach {
                                 val shipmentUIModel = it.toUIModel(isArchived = true)
                                 shipmentList.add(shipmentUIModel)
@@ -216,18 +196,13 @@ class ShipmentListViewModel @Inject constructor(
                     } else {
                         showError(shipmentsResult.getErrorMessage())
                     }
-                    hideLoading()
                 }
         }
     }
 
     private fun refreshData() {
         lastUserAction = LastUserAction.DEFAULT
-
-        currentJob?.cancel()
-        currentJob = viewModelScope.launch(Dispatchers.Main) {
-            showLoading()
-
+        launchJob {
             val shipmentList = mutableListOf<ShipmentUIType>()
             shipmentRepository.loadShipments()
                 .take(1)
@@ -247,7 +222,6 @@ class ShipmentListViewModel @Inject constructor(
                     } else {
                         showError(shipmentsResult.getErrorMessage())
                     }
-                    hideLoading()
                 }
         }
     }
@@ -281,6 +255,15 @@ class ShipmentListViewModel @Inject constructor(
             else -> {
                 refreshData()
             }
+        }
+    }
+
+    private fun launchJob(action: suspend () -> Unit) {
+        currentJob?.cancel()
+        currentJob = viewModelScope.launch {
+            showLoading()
+            action()
+            hideLoading()
         }
     }
 
